@@ -74,10 +74,11 @@ void test_init_printer(char* name){
   LET_Framework_printer("\"");
 }
 
-void test_end_printer(char* name){
+void test_end_printer(char* name, ASSERT_RESULT result){
   LET_Framework_printer("\n| Test End \"");
   LET_Framework_printer(name);
-  LET_Framework_printer("\"");
+  LET_Framework_printer("\" : ");
+  LET_Framework_printer((OK==result)?"PASSED":"FAILED");
 }
 
 void assert_printer(char *name, ASSERT_TYPE type, ASSERT_COMPARE compare, char *expected, char *obtained, ASSERT_RESULT result){

@@ -49,10 +49,11 @@ Service service_init(char* name, void (*func)(void)){
   return new_service;
 }
 
-CORE_EXCEPTION test_register(Service *service, char * name, void (*func)(void)){
+CORE_EXCEPTION test_register(Service *service, char * name, void (*func)(Test *)){
   Test new_test;
   new_test.test_name = name;
   new_test.main_func = func;
+  new_test.result = OK;
   if(service->test_num >= MAX_TESTS) return CORE_KO;
   service->test_list[service->test_num++] = new_test;
   return CORE_OK;
@@ -65,8 +66,8 @@ void service_runner(Service *service){
     current_test = &service->test_list[i];
     test_init_printer(current_test->test_name);
     service->init_func();
-    current_test->main_func();
-    test_end_printer(current_test->test_name);
+    current_test->main_func(current_test);
+    test_end_printer(current_test->test_name, current_test->result);
   }
   service_end_printer(service->suite_name);
 }

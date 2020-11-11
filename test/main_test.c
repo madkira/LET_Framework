@@ -9,18 +9,18 @@ void LET_Framework_printer (const char * data){
     printf(data);
 }
 
-void mono_basic_assertion (void){
+void mono_basic_assertion (Test *itself){
     uint8_t value = 9;
     printf("\n|    Result expected 1 got : %u",ASSERT_UINT(EQUAL,value,value));
 }
 
-void dual_basic_assertion (void){
+void dual_basic_assertion (Test *itself){
     int8_t value = -9;
     printf("\n|    Result expected 1 got : %u",ASSERT_INT(EQUAL, value, value));
     printf("\n|    Result expected 0 got : %u",ASSERT_INT(NOT_EQUAL, value, value));
 }
 
-void multi_basic_assertion (void){
+void multi_basic_assertion (Test *itself){
     uint8_t uvalue = 9;
     int8_t ivalue = -9;
 
@@ -42,7 +42,7 @@ void multi_basic_assertion (void){
 
 }
 
-void uint_format_assertion (void){
+void uint_format_assertion (Test *itself){
     uint8_t u8value = 192;
     uint16_t u16value = 47245;
     uint32_t u32value = 0xF3B7261A;
@@ -71,13 +71,19 @@ void uint_format_assertion (void){
     ASSERT_UINT(NOT_EQUAL, u64value+3, u64value, QWORD);
 }
 
-void uint_conversion_assertion (void){
+void uint_conversion_assertion (Test *itself){
     uint64_t u64value = 0x0002FB36BF72261A;
     uint8_t u8value = 0x1A;
     ASSERT_UINT(EQUAL, u8value, u64value, BYTE, HEXADECIMAL);
     ASSERT_UINT(NOT_EQUAL, u8value, u64value, WORD, HEXADECIMAL);
     ASSERT_UINT(NOT_EQUAL, u8value, u64value, DWORD, HEXADECIMAL);
     ASSERT_UINT(NOT_EQUAL, u8value, u64value, QWORD, HEXADECIMAL);
+}
+
+void rename_assertion (Test *itself){
+    uint8_t u8value = 0x1A;
+    ASSERT_UINT(EQUAL, u8value, u8value, BYTE, HEXADECIMAL, "Rename uint assertion");
+    ASSERT_INT(EQUAL, u8value, u8value, "Rename int assertion");
 }
 
 int main (){
@@ -96,9 +102,10 @@ int main (){
     test_register(&multi_test, "multi_basic_assertion", multi_basic_assertion);
     service_runner(&multi_test);
 
-    Service format_test = service_init ("formart", empty_init);
+    Service format_test = service_init ("format", empty_init);
     test_register(&format_test, "uint_format_assertion", uint_format_assertion);
     test_register(&format_test, "uint_conversion_assertion", uint_conversion_assertion);
+    test_register(&format_test, "rename_assertion", rename_assertion);
     service_runner(&format_test);
 
     return 0;

@@ -44,7 +44,7 @@
 // +----------------------------------------------------+
 // | LET_Framework_Assert public functions definition   |
 // +----------------------------------------------------+
-ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion, uint64_t obtained, uint64_t expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name){
+ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion, uint64_t obtained, uint64_t expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name, Test *itself){
   char str_expected[70];
   char str_obtained[70];
   obtained = (BYTE == precision)?obtained&BYTE_MASK : (WORD == precision)?obtained&WORD_MASK : (DWORD == precision)? obtained&DWORD_MASK : obtained&QWORD_MASK;
@@ -77,27 +77,29 @@ ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion, uint64_t obtained, uint64_t 
     default:
       break;
   }
-  switch (format)
-  {
-  case DECIMAL:
-    uint_to_decimal_string(str_expected, expected);
-    uint_to_decimal_string(str_obtained, obtained);
-    break;
-  case HEXADECIMAL:
-  case OCTAL:
-  case BINARY:
-    uint_to_base_string(str_expected, expected, format, precision);
-    uint_to_base_string(str_obtained, obtained, format, precision);
-    break;
-  default:
-    break;
+
+  if(KO == result) itself->result = KO;
+
+  switch (format){
+    case HEXADECIMAL:
+    case OCTAL:
+    case BINARY:
+      uint_to_base_string(str_expected, expected, format, precision);
+      uint_to_base_string(str_obtained, obtained, format, precision);
+      break;
+
+    case DECIMAL:
+    default:
+      uint_to_decimal_string(str_expected, expected);
+      uint_to_decimal_string(str_obtained, obtained);
+      break;
   }
 
   assert_printer(name, UINT, assertion, str_expected, str_obtained, result);
   return result;
 }
 
-ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion, int64_t obtained, int64_t expected, char* name){
+ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion, int64_t obtained, int64_t expected, char* name, Test *itself){
   char str_expected[25];
   char str_obtained[25];
   ASSERT_RESULT result = KO;
@@ -124,13 +126,15 @@ ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion, int64_t obtained, int64_t exp
       break;
   }
 
+  if(KO == result) itself->result = KO;
+
   int_to_string(str_expected, expected);
   int_to_string(str_obtained, obtained);
   assert_printer(name, INT, assertion, str_expected, str_obtained, result);
   return result;
 }
 
-ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion, float obtained, float expected, float delta, uint8_t precision, ASSERT_REPRESENT format, char* name){
+ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion, float obtained, float expected, float delta, uint8_t precision, ASSERT_REPRESENT format, char* name, Test *itself){
   ASSERT_RESULT result = KO;
   switch (assertion) {
     case EQUAL:
@@ -148,11 +152,13 @@ ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion, float obtained, float expec
     default:
       break;
   }
+
+  if(KO == result) itself->result = KO;
 //  assert_printer(name);
   return result;
 }
 
-ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion, double obtained, double expected, double delta, uint8_t precision, ASSERT_REPRESENT format, char* name){
+ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion, double obtained, double expected, double delta, uint8_t precision, ASSERT_REPRESENT format, char* name, Test *itself){
   ASSERT_RESULT result = KO;
   switch (assertion) {
     case EQUAL:
@@ -170,28 +176,24 @@ ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion, double obtained, double ex
     default:
       break;
   }
+
+  if(KO == result) itself->result = KO;
 //  assert_printer(name);
   return result;
 }
 
-ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion, uint8_t* obtained, uint8_t* expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name){
+ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion, uint8_t* obtained, uint8_t* expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name, Test *itself){
   ASSERT_RESULT result = KO;
   switch (assertion) {
     case EQUAL:
       break;
     case NOT_EQUAL:
       break;
-    case HIGHER_THAN:
-      break;
-    case HIGHER_OR_EQUAL:
-      break;
-    case LOWER_THAN:
-      break;
-    case LOWER_OR_EQUAL:
-      break;
     default:
       break;
   }
+
+  if(KO == result) itself->result = KO;
 //  assert_printer(name);
   return result;
 }

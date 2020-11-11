@@ -50,5 +50,5 @@ void service_init_printer(char *name, uint8_t test_number);
 void service_end_printer(char *name);
 void assert_printer(char *name, ASSERT_TYPE type, ASSERT_COMPARE compare, char *expected, char *obtained, ASSERT_RESULT result);
 void test_init_printer(char *name);
-void test_end_printer(char *name);
+void test_end_printer(char* name, ASSERT_RESULT result);
 #endif //D_LET_Framework_RESULT_H_
