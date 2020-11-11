@@ -10,12 +10,23 @@
 // +-------------------------------------------+
 // | LET_Framework_Result Includes             |
 // +-------------------------------------------+
-/*Not Used*/
+#include "LET_Framework.h"
 
 // +-------------------------------------------+
 // | LET_Framework_Result Types                |
 // +-------------------------------------------+
-/*Not Used*/
+
+#define FOREACH_TYPE(TYPE) \
+        TYPE(UINT) \
+        TYPE(INT) \
+        TYPE(FLOAT) \
+        TYPE(DOUBLE) \
+        TYPE(STR)
+
+typedef enum {
+    FOREACH_TYPE(GENERATE_ENUM)
+}ASSERT_TYPE;
+
 
 // +-------------------------------------------+
 // | LET_Framework_Result Structures           |
@@ -35,9 +46,9 @@
 // +-------------------------------------------+
 // | LET_Framework_Result Functions Definition |
 // +-------------------------------------------+
-void service_init_printer(char* name, uint8_t test_number);
-void service_end_printer(char* name);
-void assert_printer(char* name);
-void test_init_printer(char* name);
-void test_end_printer(char* name);
+void service_init_printer(char *name, uint8_t test_number);
+void service_end_printer(char *name);
+void assert_printer(char *name, ASSERT_TYPE type, ASSERT_COMPARE compare, char *expected, char *obtained, ASSERT_RESULT result);
+void test_init_printer(char *name);
+void test_end_printer(char *name);
 #endif //D_LET_Framework_RESULT_H_

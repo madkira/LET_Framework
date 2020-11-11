@@ -31,10 +31,12 @@
 // +-------------------------------------------+
 /*Not Used*/
 
+
+
 // +-------------------------------------------+
 // | text_format extern functions definition   |
 // +-------------------------------------------+
-extern void LET_Framework_printer(char * data);
+extern void LET_Framework_printer(const char * data);
 
 // +-------------------------------------------+
 // | text_format private functions definition  |
@@ -52,7 +54,7 @@ extern void LET_Framework_printer(char * data);
 // +-------------------------------------------+
 void service_init_printer(char* name, uint8_t test_number){
   char number[5] = {'\n'};
-  uint_to_string(number, test_number);
+  uint_to_decimal_string(number, test_number);
   LET_Framework_printer("Service Begin \"");
   LET_Framework_printer(name);
   LET_Framework_printer("\" with ");
@@ -69,17 +71,27 @@ void service_end_printer(char* name){
 void test_init_printer(char* name){
   LET_Framework_printer("\n| Test Begin \"");
   LET_Framework_printer(name);
-  LET_Framework_printer("\" :");
+  LET_Framework_printer("\"");
 }
 
 void test_end_printer(char* name){
   LET_Framework_printer("\n| Test End \"");
   LET_Framework_printer(name);
-  LET_Framework_printer("\" :");
+  LET_Framework_printer("\"");
 }
 
-void assert_printer(char* name){
-  LET_Framework_printer("\n|\tAssertion \"");
+void assert_printer(char *name, ASSERT_TYPE type, ASSERT_COMPARE compare, char *expected, char *obtained, ASSERT_RESULT result){
+  LET_Framework_printer("\n|\tAssertion ");
+  LET_Framework_printer(" \"");
   LET_Framework_printer(name);
-  LET_Framework_printer("\" :");
+  LET_Framework_printer("\" : Expected ");
+  LET_Framework_printer(ASSERT_TYPE_STRING[type]);
+  LET_Framework_printer(" ");
+  LET_Framework_printer(ASSERT_COMPARE_STRING[compare]);
+  LET_Framework_printer(" ");
+  LET_Framework_printer(expected);
+  LET_Framework_printer(" Obtained ");
+  LET_Framework_printer(obtained);
+  LET_Framework_printer(" --> ");
+  LET_Framework_printer(ASSERT_RESULT_STRING[result]);
 }

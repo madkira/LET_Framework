@@ -11,44 +11,45 @@
 // | LET_Framework_Core Includes             |
 // +-----------------------------------------+
 #include "stdint.h"
+#include "LET_Framework.h"
 
-// +-----------------------------------------+
-// | LET_Framework_Core Macros               |
-// +-----------------------------------------+
-#define MAX_TESTS 10
+// // +-----------------------------------------+
+// // | LET_Framework_Core Macros               |
+// // +-----------------------------------------+
+// #define MAX_TESTS 10
 
-// +-----------------------------------------+
-// | LET_Framework_Core Types                |
-// +-----------------------------------------+
-typedef enum{
-  CORE_OK
-  ,CORE_KO
-}CORE_EXCEPTION;
+// // +-----------------------------------------+
+// // | LET_Framework_Core Types                |
+// // +-----------------------------------------+
+// typedef enum{
+//   CORE_OK
+//   ,CORE_KO
+// }CORE_EXCEPTION;
 
-// +-----------------------------------------+
-// | LET_Framework_Core Structures           |
-// +-----------------------------------------+
-typedef struct LET_Framework_Test {
-  char * test_name;
-  void (*main_func)(void);
-}Test;
+// // +-----------------------------------------+
+// // | LET_Framework_Core Structures           |
+// // +-----------------------------------------+
+// typedef struct LET_Framework_Test {
+//   char * test_name;
+//   void (*main_func)(void);
+// }Test;
 
-typedef struct LET_Framework_Service {
-  char* suite_name;
-  void (*init_func)(void);
-  uint8_t test_num;
-  Test test_list[MAX_TESTS];
-}Service;
+// typedef struct LET_Framework_Service {
+//   char* suite_name;
+//   void (*init_func)(void);
+//   uint8_t test_num;
+//   Test test_list[MAX_TESTS];
+// }Service;
 
-// +-----------------------------------------+
-// | LET_Framework_Core Variables            |
-// +-----------------------------------------+
-/*Not Used*/
+// // +-----------------------------------------+
+// // | LET_Framework_Core Variables            |
+// // +-----------------------------------------+
+// /*Not Used*/
 
-// +-----------------------------------------+
-// | LET_Framework_Core Functions Definition |
-// +-----------------------------------------+
-Service service_init(char* name, void (*func)(void));
-CORE_EXCEPTION test_register(Service *service, char * name, void (*func)(void));
-void service_runner(Service *service);
+// // +-----------------------------------------+
+// // | LET_Framework_Core Functions Definition |
+// // +-----------------------------------------+
+// Service service_init(char* name, void (*func)(void));
+// CORE_EXCEPTION test_register(Service *service, char * name, void (*func)(void));
+// void service_runner(Service *service);
 #endif //D_LET_Framework_CORE_H_

@@ -17,6 +17,7 @@
 // | LET_Framework Macros               |
 // +------------------------------------+
 #define MAX_TESTS 10
+#define GENERATE_ENUM(ENUM) ENUM,
 
 // +------------------------------------+
 // | LET_Framework Types                |
@@ -26,19 +27,31 @@ typedef enum{
   ,CORE_KO
 }CORE_EXCEPTION;
 
-typedef enum{
-  OK = 1
-  ,KO = 0
+
+
+#define FOREACH_RESULT(RESULT) \
+        RESULT(OK) \
+        RESULT(KO)
+
+typedef enum {
+  FOREACH_RESULT(GENERATE_ENUM)
 }ASSERT_RESULT;
 
-typedef enum{
-  EQUAL
-  ,NOT_EQUAL
-  ,HIGHER_THAN
-  ,LOWER_THAN
-  ,HIGHER_OR_EQUAL
-  ,LOWER_OR_EQUAL
-}ASSERT_TYPE;
+#define FOREACH_COMPARE(COMPARE) \
+        COMPARE(EQUAL) \
+        COMPARE(NOT_EQUAL) \
+        COMPARE(HIGHER_THAN) \
+        COMPARE(LOWER_THAN) \
+        COMPARE(HIGHER_OR_EQUAL) \
+        COMPARE(LOWER_OR_EQUAL) \
+        COMPARE(FLAG_SET) \
+        COMPARE(NOT_FLAG_SET)
+
+
+typedef enum {
+  FOREACH_COMPARE(GENERATE_ENUM)
+}ASSERT_COMPARE;
+
 
 typedef enum{
   BYTE    =1
@@ -50,6 +63,7 @@ typedef enum{
 typedef enum{
   DECIMAL
   ,HEXADECIMAL
+  ,OCTAL
   ,BINARY
   ,SCIENTIST
   ,STRING
@@ -61,6 +75,7 @@ typedef enum{
 typedef struct LET_Framework_Test {
   char * test_name;
   void (*main_func)(void);
+  ASSERT_RESULT result;
 }Test;
 
 typedef struct LET_Framework_Service {
@@ -79,18 +94,16 @@ typedef struct LET_Framework_Service {
 // | LET_Framework Functions Definition |
 // +------------------------------------+
 
-#define ASSERT_UINT5(a, b, ...) ASSERT_uint(a, b, __VA_ARGS__, #b) // <== New function added
+#define ASSERT_UINT5(a, b, c, ...) ASSERT_uint(a, b, c, __VA_ARGS__, #c) // <== New function added
 #define ASSERT_UINT4(a, b, ...) ASSERT_UINT5(a, b, __VA_ARGS__, DECIMAL) // <== New function added
 #define ASSERT_UINT3(a, b, ...) ASSERT_UINT4(a, b, __VA_ARGS__, DWORD)
 #define ASSERT_UINT2(a,b, ...)  ASSERT_UINT3(a, b, __VA_ARGS__)
 #define ASSERT_UINT_FUNC(_1, _2, _3, _4, _5, _6, NAME, ...) NAME
-#define ASSERT_UINT(...) ASSERT_UINT_FUNC(__VA_ARGS__, ASSERT_uint,  ASSERT_UINT5, ASSERT_UINT4, ASSERT_UINT3, ASSERT_UINT2)(__VA_ARGS__)
+#define ASSERT_UINT(...) ASSERT_UINT_FUNC(__VA_ARGS__, ASSERT_uint, ASSERT_UINT5, ASSERT_UINT4, ASSERT_UINT3, ASSERT_UINT2)(__VA_ARGS__)
 
-#define ASSERT_INT5(a, b, ...) ASSERT_int(a, b, __VA_ARGS__, #b) // <== New function added
-#define ASSERT_INT4(a, b, ...) ASSERT_INT5(a, b, __VA_ARGS__, DECIMAL) // <== New function added
-#define ASSERT_INT3(a, b, ...) ASSERT_INT4(a, b, __VA_ARGS__, DWORD)
-#define ASSERT_INT_FUNC(_1, _2, _3, _4, _5, _6, NAME, ...) NAME
-#define ASSERT_INT(...) ASSERT_INT_FUNC(__VA_ARGS__, ASSERT_int,  ASSERT_INT5, ASSERT_INT4, ASSERT_INT3, ASSERT_INT2)(__VA_ARGS__)
+#define ASSERT_INT3(a, b, ...) ASSERT_int(a, b, __VA_ARGS__, #b) // <== New function added
+#define ASSERT_INT_FUNC(_1, _2, _3, _4, NAME, ...) NAME
+#define ASSERT_INT(...) ASSERT_INT_FUNC(__VA_ARGS__, ASSERT_int, ASSERT_INT3, ASSERT_INT2)(__VA_ARGS__)
 
 #define ASSERT_FLOAT6(a, b, ...) ASSERT_float(a, b, __VA_ARGS__, #b) // <== New function added
 #define ASSERT_FLOAT5(a, b, ...) ASSERT_FLOAT6(a, b, __VA_ARGS__, DECIMAL) // <== New function added
@@ -107,11 +120,11 @@ typedef struct LET_Framework_Service {
 #define ASSERT_DOUBLE(...) ASSERT_DOUBLE_FUNC(__VA_ARGS__, ASSERT_double, ASSERT_DOUBLE6, ASSERT_DOUBLE5, ASSERT_DOUBLE4, ASSERT_DOUBLE3, ASSERT_DOUBLE2)(__VA_ARGS__)
 
 
-ASSERT_RESULT ASSERT_uint(ASSERT_TYPE assertion, uint64_t obtained, uint64_t expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name);
-ASSERT_RESULT ASSERT_int(ASSERT_TYPE assertion, int64_t obtained, int64_t expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name);
-ASSERT_RESULT ASSERT_float(ASSERT_TYPE assertion, float obtained, float expected, float delta, uint8_t precision, ASSERT_REPRESENT format, char* name);
-ASSERT_RESULT ASSERT_double(ASSERT_TYPE assertion, double obtained, double expected, double delta, uint8_t precision, ASSERT_REPRESENT format, char* name);
-ASSERT_RESULT ASSERT_str(ASSERT_TYPE assertion, uint8_t* obtained, uint8_t* expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name);
+ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion, uint64_t obtained, uint64_t expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name);
+ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion, int64_t obtained, int64_t expected, char* name);
+ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion, float obtained, float expected, float delta, uint8_t precision, ASSERT_REPRESENT format, char* name);
+ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion, double obtained, double expected, double delta, uint8_t precision, ASSERT_REPRESENT format, char* name);
+ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion, uint8_t* obtained, uint8_t* expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name);
 
 Service service_init(char* name, void (*func)(void));
 CORE_EXCEPTION test_register(Service *service, char * name, void (*func)(void));
