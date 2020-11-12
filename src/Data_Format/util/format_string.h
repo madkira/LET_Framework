@@ -47,6 +47,8 @@ extern const char *ASSERT_RESULT_STRING[];
 void uint_to_decimal_string(char str[], uint64_t num);
 void uint_to_base_string(char str[], uint64_t num, ASSERT_REPRESENT format, ASSERT_PRECISION bytes);
 void int_to_string(char str[], int64_t num);
-
+uint8_t compare_str(char *a, char *b);
+uint16_t str_size(char *a);
+void str_convert(char dest[], char *src, ASSERT_REPRESENT format, ASSERT_PRECISION whitespace);
 
 #endif //D_UTIL_FORMAT_H_

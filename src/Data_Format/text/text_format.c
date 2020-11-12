@@ -89,10 +89,10 @@ void assert_printer(char *name, ASSERT_TYPE type, ASSERT_COMPARE compare, char *
   LET_Framework_printer(ASSERT_TYPE_STRING[type]);
   LET_Framework_printer(" ");
   LET_Framework_printer(ASSERT_COMPARE_STRING[compare]);
-  LET_Framework_printer(" ");
+  LET_Framework_printer(" [");
   LET_Framework_printer(expected);
-  LET_Framework_printer(" Obtained ");
+  LET_Framework_printer("] Obtained [");
   LET_Framework_printer(obtained);
-  LET_Framework_printer(" --> ");
+  LET_Framework_printer("] --> ");
   LET_Framework_printer(ASSERT_RESULT_STRING[result]);
 }

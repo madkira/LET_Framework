@@ -21,6 +21,9 @@
 #define DWORD_MASK 0xFFFFFFFF
 #define QWORD_MASK 0xFFFFFFFFFFFFFFFF
 
+#define BYTE_DIGIT 8
+#define HEXA_DIGIT 2
+
 // +----------------------------------------------------+
 // | LET_Framework_Assert types                         |
 // +----------------------------------------------------+
@@ -182,18 +185,40 @@ ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion, double obtained, double ex
   return result;
 }
 
-ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion, uint8_t* obtained, uint8_t* expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name, Test *itself){
+ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion, uint8_t* obtained, uint8_t* expected, ASSERT_PRECISION whitespace, ASSERT_REPRESENT format, char* name, Test *itself){
   ASSERT_RESULT result = KO;
   switch (assertion) {
     case EQUAL:
+      if(!compare_str(expected,obtained))result = OK;
       break;
     case NOT_EQUAL:
+      if(compare_str(expected,obtained))result = OK;
       break;
     default:
       break;
   }
 
   if(KO == result) itself->result = KO;
-//  assert_printer(name);
+
+
+if(OCTAL == format){
+  format = HEXADECIMAL;
+}
+
+  if(HEXADECIMAL == format || BINARY == format){
+    uint16_t expected_size = str_size(expected);
+    uint16_t obtained_size = str_size(obtained);
+    expected_size = (expected_size/whitespace) + expected_size*((BINARY==format)?BYTE_DIGIT : HEXA_DIGIT);
+    obtained_size = (obtained_size/whitespace) + obtained_size*((BINARY==format)?BYTE_DIGIT : HEXA_DIGIT);
+
+    char convert_expected[expected_size];
+    char convert_obtained[obtained_size];
+    str_convert(convert_expected, expected, format, whitespace);
+    str_convert(convert_obtained, obtained, format, whitespace);
+    assert_printer(name, STR, assertion, convert_expected, convert_obtained, result);
+  }else{
+    assert_printer(name, STR, assertion, expected, obtained, result);
+  }
+
   return result;
 }

@@ -80,6 +80,28 @@ void uint_conversion_assertion (Test *itself){
     ASSERT_UINT(NOT_EQUAL, u8value, u64value, QWORD, HEXADECIMAL);
 }
 
+void str_assertion(Test *itself){
+    char *lorem_ipsum = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.";
+    char *lorem_ipsum2 = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged!";
+    char *lorem_ipsum3 = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
+    char *lorem_ipsum4 = "Lorem Ipsum is simply dummy text of the printing and typesetting industry!";
+    ASSERT_STR(EQUAL, lorem_ipsum, lorem_ipsum);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum2, lorem_ipsum);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum3, lorem_ipsum);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum2, lorem_ipsum3);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum4, lorem_ipsum);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum2, lorem_ipsum4);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, BYTE, HEXADECIMAL);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, WORD, HEXADECIMAL);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, DWORD, HEXADECIMAL);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, QWORD, HEXADECIMAL);
+
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, BYTE, BINARY);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, WORD, BINARY);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, DWORD, BINARY);
+    ASSERT_STR(NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, QWORD, BINARY);
+}
+
 void rename_assertion (Test *itself){
     uint8_t u8value = 0x1A;
     ASSERT_UINT(EQUAL, u8value, u8value, BYTE, HEXADECIMAL, "Rename uint assertion");
@@ -106,6 +128,7 @@ int main (){
     test_register(&format_test, "uint_format_assertion", uint_format_assertion);
     test_register(&format_test, "uint_conversion_assertion", uint_conversion_assertion);
     test_register(&format_test, "rename_assertion", rename_assertion);
+    test_register(&format_test, "str_assertion", str_assertion);
     service_runner(&format_test);
 
     return 0;

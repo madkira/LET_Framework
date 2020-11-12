@@ -135,7 +135,7 @@ typedef struct LET_Framework_Service {
 #define ASSERT_STR4(...) ASSERT_STR5(__VA_ARGS__, STRING)
 #define ASSERT_STR3(...) ASSERT_STR4(__VA_ARGS__, DWORD)
 #define ASSERT_STR_FUNC(_1, _2, _3, _4, _5, _6, _7, NAME, ...) NAME
-#define ASSERT_STR(...) ASSERT_STR_FUNC(__VA_ARGS__, ASSERT_str, ASSERT_STR_CALL, ASSERT_STR3, ...)(__VA_ARGS__)
+#define ASSERT_STR(...) ASSERT_STR_FUNC(__VA_ARGS__, ASSERT_str, ASSERT_STR_CALL, ASSERT_STR5, ASSERT_STR4, ASSERT_STR3, ...)(__VA_ARGS__)
 
 
 
@@ -144,7 +144,7 @@ ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion, uint64_t obtained, uint64_t 
 ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion, int64_t obtained, int64_t expected, char* name, Test *itself);
 ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion, float obtained, float expected, float delta, uint8_t precision, ASSERT_REPRESENT format, char* name, Test *itself);
 ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion, double obtained, double expected, double delta, uint8_t precision, ASSERT_REPRESENT format, char* name, Test *itself);
-ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion, uint8_t* obtained, uint8_t* expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name, Test *itself);
+ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion, uint8_t* obtained, uint8_t* expected, ASSERT_PRECISION whitespace, ASSERT_REPRESENT format, char* name, Test *itself);
 
 Service service_init(char* name, void (*func)(void));
 CORE_EXCEPTION test_register(Service *service, char * name, void (*func)(Test *));
