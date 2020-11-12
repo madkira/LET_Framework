@@ -94,7 +94,11 @@ typedef struct LET_Framework_Service {
 // +------------------------------------+
 // | LET_Framework Functions Definition |
 // +------------------------------------+
+#ifdef FILE_AND_LINE
+#define ASSERT_UINT_CALL(...) ASSERT_uint(__VA_ARGS__, itself, __FILE__, __LINE__)
+#else
 #define ASSERT_UINT_CALL(...) ASSERT_uint(__VA_ARGS__, itself)
+#endif
 #define ASSERT_UINT5(a, b, ...) ASSERT_UINT_CALL(a, b, __VA_ARGS__, #b)
 #define ASSERT_UINT4(...) ASSERT_UINT5(__VA_ARGS__, DECIMAL)
 #define ASSERT_UINT3(...) ASSERT_UINT4(__VA_ARGS__, DWORD)
@@ -102,15 +106,22 @@ typedef struct LET_Framework_Service {
 #define ASSERT_UINT(...) ASSERT_UINT_FUNC(__VA_ARGS__, ASSERT_uint, ASSERT_UINT_CALL, ASSERT_UINT5, ASSERT_UINT4, ASSERT_UINT3, ...)(__VA_ARGS__)
 
 
-
+#ifdef FILE_AND_LINE
+#define ASSERT_INT_CALL(...) ASSERT_int(__VA_ARGS__, itself, __FILE__, __LINE__)
+#else
 #define ASSERT_INT_CALL(...) ASSERT_int(__VA_ARGS__, itself)
+#endif
 #define ASSERT_INT3(a, b, ...) ASSERT_INT_CALL(a, b, __VA_ARGS__, #b)
 #define ASSERT_INT_FUNC(_1, _2, _3, _4, _5, NAME, ...) NAME
 #define ASSERT_INT(...) ASSERT_INT_FUNC(__VA_ARGS__, ASSERT_int, ASSERT_INT_CALL, ASSERT_INT3, ...)(__VA_ARGS__)
 
 
 
-#define ASSERT_FLOAT_CALL(...) ASSERT_int(__VA_ARGS__, itself)
+#ifdef FILE_AND_LINE
+#define ASSERT_FLOAT_CALL(...) ASSERT_float(__VA_ARGS__, itself, __FILE__, __LINE__)
+#else
+#define ASSERT_FLOAT_CALL(...) ASSERT_float(__VA_ARGS__, itself)
+#endif
 #define ASSERT_FLOAT6(a, b, ...) ASSERT_FLOAT_CALL(a, b, __VA_ARGS__, #b)
 #define ASSERT_FLOAT5(...) ASSERT_FLOAT6(__VA_ARGS__, DECIMAL)
 #define ASSERT_FLOAT4(...) ASSERT_FLOAT5(__VA_ARGS__, 6)
@@ -120,7 +131,11 @@ typedef struct LET_Framework_Service {
 
 
 
-#define ASSERT_DOUBLE_CALL(...) ASSERT_int(__VA_ARGS__, itself)
+#ifdef FILE_AND_LINE
+#define ASSERT_DOUBLE_CALL(...) ASSERT_double(__VA_ARGS__, itself, __FILE__, __LINE__)
+#else
+#define ASSERT_DOUBLE_CALL(...) ASSERT_double(__VA_ARGS__, itself)
+#endif
 #define ASSERT_DOUBLE6(a, b, ...) ASSERT_DOUBLE_CALL(a, b, __VA_ARGS__, #b)
 #define ASSERT_DOUBLE5(...) ASSERT_DOUBLE6(__VA_ARGS__, DECIMAL)
 #define ASSERT_DOUBLE4(...) ASSERT_DOUBLE5(__VA_ARGS__, 10)
@@ -130,7 +145,11 @@ typedef struct LET_Framework_Service {
 
 
 
+#ifdef FILE_AND_LINE
+#define ASSERT_STR_CALL(...) ASSERT_str(__VA_ARGS__, itself, __FILE__, __LINE__)
+#else
 #define ASSERT_STR_CALL(...) ASSERT_str(__VA_ARGS__, itself)
+#endif
 #define ASSERT_STR5(a, b, ...) ASSERT_STR_CALL(a, b, __VA_ARGS__, #b)
 #define ASSERT_STR4(...) ASSERT_STR5(__VA_ARGS__, STRING)
 #define ASSERT_STR3(...) ASSERT_STR4(__VA_ARGS__, DWORD)
@@ -140,11 +159,70 @@ typedef struct LET_Framework_Service {
 
 
 
-ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion, uint64_t obtained, uint64_t expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name, Test *itself);
-ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion, int64_t obtained, int64_t expected, char* name, Test *itself);
-ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion, float obtained, float expected, float delta, uint8_t precision, ASSERT_REPRESENT format, char* name, Test *itself);
-ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion, double obtained, double expected, double delta, uint8_t precision, ASSERT_REPRESENT format, char* name, Test *itself);
-ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion, uint8_t* obtained, uint8_t* expected, ASSERT_PRECISION whitespace, ASSERT_REPRESENT format, char* name, Test *itself);
+ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion,
+                          uint64_t obtained,
+                          uint64_t expected,
+                          ASSERT_PRECISION precision,
+                          ASSERT_REPRESENT format,
+                          char* name,
+                          Test *itself
+#ifdef FILE_AND_LINE
+                          ,char *file
+                          ,uint32_t line
+#endif
+);
+
+ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion,
+                        int64_t obtained,
+                        int64_t expected,
+                        char* name,
+                        Test *itself
+#ifdef FILE_AND_LINE
+                        ,char *file
+                        ,uint32_t line
+#endif
+);
+
+ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion,
+                          float obtained,
+                          float expected,
+                          float delta,
+                          uint8_t precision,
+                          ASSERT_REPRESENT format,
+                          char* name,
+                          Test *itself
+#ifdef FILE_AND_LINE
+                          ,char *file
+                          ,uint32_t line
+#endif
+);
+
+ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion,
+                            double obtained,
+                            double expected,
+                            double delta,
+                            uint8_t precision,
+                            ASSERT_REPRESENT format,
+                            char* name,
+                            Test *itself
+#ifdef FILE_AND_LINE
+                            ,char *file
+                            ,uint32_t line
+#endif
+);
+
+ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion,
+                        uint8_t* obtained,
+                        uint8_t* expected,
+                        ASSERT_PRECISION whitespace,
+                        ASSERT_REPRESENT format,
+                        char* name,
+                        Test *itself
+#ifdef FILE_AND_LINE
+                        ,char *file
+                        ,uint32_t line
+#endif
+);
 
 Service service_init(char* name, void (*func)(void));
 CORE_EXCEPTION test_register(Service *service, char * name, void (*func)(Test *));

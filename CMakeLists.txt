@@ -14,6 +14,10 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CMAKE_C_FLAGS "-std=c11 -pedantic -O0 -g -Wall -Werror -Wno-pointer-sign -ffunction-sections -fdata-sections")
 endif()
 
+if(FILE_AND_LINE)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DFILE_AND_LINE")
+endif()
+
 ###############################
 ## end FLAGS configuration   ##
 ###############################

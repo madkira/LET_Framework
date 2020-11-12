@@ -81,8 +81,25 @@ void test_end_printer(char* name, ASSERT_RESULT result){
   LET_Framework_printer((OK==result)?"PASSED":"FAILED");
 }
 
-void assert_printer(char *name, ASSERT_TYPE type, ASSERT_COMPARE compare, char *expected, char *obtained, ASSERT_RESULT result){
+void assert_printer(char *name,
+                  ASSERT_TYPE type,
+                  ASSERT_COMPARE compare,
+                  char *expected,
+                  char *obtained,
+                  ASSERT_RESULT result
+ #ifdef FILE_AND_LINE
+                  ,char *file
+                  ,char *line
+ #endif
+){
   LET_Framework_printer("\n|\tAssertion ");
+ #ifdef FILE_AND_LINE
+  LET_Framework_printer("[");
+  LET_Framework_printer(file);
+  LET_Framework_printer("{l.");
+  LET_Framework_printer(line);
+  LET_Framework_printer("}]");
+ #endif
   LET_Framework_printer(" \"");
   LET_Framework_printer(name);
   LET_Framework_printer("\" : Expected ");

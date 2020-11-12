@@ -38,8 +38,6 @@ void multi_basic_assertion (Test *itself){
     printf("\n|    Result expected 0 got : %u", ASSERT_INT(NOT_EQUAL, ivalue, ivalue));
     printf("\n|    Result expected 0 got : %u", ASSERT_INT(LOWER_THAN, ivalue, ivalue));
     printf("\n|    Result expected 0 got : %u", ASSERT_INT(HIGHER_THAN, ivalue, ivalue));
-
-
 }
 
 void uint_format_assertion (Test *itself){

@@ -47,7 +47,21 @@
 // +----------------------------------------------------+
 // | LET_Framework_Assert public functions definition   |
 // +----------------------------------------------------+
-ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion, uint64_t obtained, uint64_t expected, ASSERT_PRECISION precision, ASSERT_REPRESENT format, char* name, Test *itself){
+ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion,
+                          uint64_t obtained,
+                          uint64_t expected,
+                          ASSERT_PRECISION precision,
+                          ASSERT_REPRESENT format,
+                          char* name,
+                          Test *itself
+ #ifdef FILE_AND_LINE
+                          ,char *file
+                          ,uint32_t line
+ #endif
+){
+ #ifdef FILE_AND_LINE
+  char str_line[25];
+ #endif
   char str_expected[70];
   char str_obtained[70];
   obtained = (BYTE == precision)?obtained&BYTE_MASK : (WORD == precision)?obtained&WORD_MASK : (DWORD == precision)? obtained&DWORD_MASK : obtained&QWORD_MASK;
@@ -97,12 +111,31 @@ ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion, uint64_t obtained, uint64_t 
       uint_to_decimal_string(str_obtained, obtained);
       break;
   }
-
-  assert_printer(name, UINT, assertion, str_expected, str_obtained, result);
+ #ifdef FILE_AND_LINE
+  uint_to_decimal_string(str_line, line);
+ #endif
+  assert_printer(name, UINT, assertion, str_expected, str_obtained, result
+ #ifdef FILE_AND_LINE
+                ,file, str_line
+ #endif
+  );
   return result;
 }
 
-ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion, int64_t obtained, int64_t expected, char* name, Test *itself){
+
+ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion,
+                        int64_t obtained,
+                        int64_t expected,
+                        char* name,
+                        Test *itself
+#ifdef FILE_AND_LINE
+                        ,char *file
+                        ,uint32_t line
+#endif
+){
+ #ifdef FILE_AND_LINE
+  char str_line[25];
+ #endif
   char str_expected[25];
   char str_obtained[25];
   ASSERT_RESULT result = KO;
@@ -133,11 +166,34 @@ ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion, int64_t obtained, int64_t exp
 
   int_to_string(str_expected, expected);
   int_to_string(str_obtained, obtained);
-  assert_printer(name, INT, assertion, str_expected, str_obtained, result);
+ #ifdef FILE_AND_LINE
+  uint_to_decimal_string(str_line, line);
+ #endif
+  assert_printer(name, INT, assertion, str_expected, str_obtained, result
+ #ifdef FILE_AND_LINE
+                ,file, str_line
+ #endif
+  );
   return result;
 }
 
-ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion, float obtained, float expected, float delta, uint8_t precision, ASSERT_REPRESENT format, char* name, Test *itself){
+
+ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion,
+                          float obtained,
+                          float expected,
+                          float delta,
+                          uint8_t precision,
+                          ASSERT_REPRESENT format,
+                          char* name,
+                          Test *itself
+#ifdef FILE_AND_LINE
+                          ,char *file
+                          ,uint32_t line
+#endif
+){
+ #ifdef FILE_AND_LINE
+  // char str_line[25];
+ #endif
   ASSERT_RESULT result = KO;
   switch (assertion) {
     case EQUAL:
@@ -161,7 +217,23 @@ ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion, float obtained, float expec
   return result;
 }
 
-ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion, double obtained, double expected, double delta, uint8_t precision, ASSERT_REPRESENT format, char* name, Test *itself){
+
+ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion,
+                            double obtained,
+                            double expected,
+                            double delta,
+                            uint8_t precision,
+                            ASSERT_REPRESENT format,
+                            char* name,
+                            Test *itself
+#ifdef FILE_AND_LINE
+                            ,char *file
+                            ,uint32_t line
+#endif
+){
+ #ifdef FILE_AND_LINE
+  // char str_line[25];
+ #endif
   ASSERT_RESULT result = KO;
   switch (assertion) {
     case EQUAL:
@@ -185,7 +257,22 @@ ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion, double obtained, double ex
   return result;
 }
 
-ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion, uint8_t* obtained, uint8_t* expected, ASSERT_PRECISION whitespace, ASSERT_REPRESENT format, char* name, Test *itself){
+
+ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion,
+                        uint8_t* obtained,
+                        uint8_t* expected,
+                        ASSERT_PRECISION whitespace,
+                        ASSERT_REPRESENT format,
+                        char* name,
+                        Test *itself
+#ifdef FILE_AND_LINE
+                        ,char *file
+                        ,uint32_t line
+#endif
+){
+ #ifdef FILE_AND_LINE
+  char str_line[25];
+ #endif
   ASSERT_RESULT result = KO;
   switch (assertion) {
     case EQUAL:
@@ -215,9 +302,25 @@ if(OCTAL == format){
     char convert_obtained[obtained_size];
     str_convert(convert_expected, expected, format, whitespace);
     str_convert(convert_obtained, obtained, format, whitespace);
-    assert_printer(name, STR, assertion, convert_expected, convert_obtained, result);
+
+   #ifdef FILE_AND_LINE
+    uint_to_decimal_string(str_line, line);
+   #endif
+    assert_printer(name, STR, assertion, convert_expected, convert_obtained, result
+   #ifdef FILE_AND_LINE
+                  ,file, str_line
+   #endif
+    );
   }else{
-    assert_printer(name, STR, assertion, expected, obtained, result);
+
+   #ifdef FILE_AND_LINE
+    uint_to_decimal_string(str_line, line);
+   #endif
+    assert_printer(name, STR, assertion, expected, obtained, result
+   #ifdef FILE_AND_LINE
+                  ,file, str_line
+   #endif
+      );
   }
 
   return result;
