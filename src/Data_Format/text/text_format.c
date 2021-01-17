@@ -9,10 +9,8 @@
 // +-------------------------------------------+
 // | text_format includes                      |
 // +-------------------------------------------+
-// Temporary Shared library Might be removed for no dependency purpose
 #include "stdint.h"
 
-#include "text_format.h"
 #include "LET_Framework_Result.h"
 #include "format_string.h"
 
@@ -52,6 +50,9 @@ extern void LET_Framework_printer(const char * data);
 // +-------------------------------------------+
 // | text_format public functions declaration  |
 // +-------------------------------------------+
+void LET_init_printer(void){;}
+void LET_end_printer(void){;}
+
 void service_init_printer(char* name, uint8_t test_number){
   char number[5] = {'\n'};
   uint_to_decimal_string(number, test_number);
@@ -92,7 +93,7 @@ void assert_printer(char *name,
                   ,char *line
  #endif
 ){
-  LET_Framework_printer("\n|\tAssertion ");
+  LET_Framework_printer("\n| | Assertion ");
  #ifdef FILE_AND_LINE
   LET_Framework_printer("[");
   LET_Framework_printer(file);

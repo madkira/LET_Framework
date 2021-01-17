@@ -11,33 +11,60 @@ void LET_Framework_printer (const char * data){
 
 void mono_basic_assertion (Test *itself){
     uint8_t value = 9;
-    printf("\n|    Result expected 1 got : %u",ASSERT_UINT(EQUAL,value,value));
+    #ifndef STOP_TEST_ON_FAILED
+    printf("\n| | | Result expected 1 got : %u",ASSERT_UINT(EQUAL,value,9));
+    #else
+    ASSERT_UINT(EQUAL,value,value);
+    #endif
 }
 
 void dual_basic_assertion (Test *itself){
     int8_t value = -9;
-    printf("\n|    Result expected 1 got : %u",ASSERT_INT(EQUAL, value, value));
-    printf("\n|    Result expected 0 got : %u",ASSERT_INT(NOT_EQUAL, value, value));
+    #ifndef STOP_TEST_ON_FAILED
+    printf("\n| | | Result expected 1 got : %u",ASSERT_INT(EQUAL, value, value));
+    printf("\n| | | Result expected 0 got : %u",ASSERT_INT(NOT_EQUAL, value, value));
+    #else
+    ASSERT_INT(EQUAL, value, value);
+    ASSERT_INT(NOT_EQUAL, value, value);
+    #endif
 }
 
 void multi_basic_assertion (Test *itself){
     uint8_t uvalue = 9;
     int8_t ivalue = -9;
 
-    printf("\n|    Result expected 1 got : %u", ASSERT_UINT(EQUAL, uvalue, uvalue));
-    printf("\n|    Result expected 1 got : %u", ASSERT_UINT(LOWER_OR_EQUAL, uvalue, uvalue));
-    printf("\n|    Result expected 1 got : %u", ASSERT_UINT(HIGHER_OR_EQUAL, uvalue, uvalue));
-    printf("\n|    Result expected 0 got : %u", ASSERT_UINT(NOT_EQUAL, uvalue, uvalue));
-    printf("\n|    Result expected 0 got : %u", ASSERT_UINT(LOWER_THAN, uvalue, uvalue));
-    printf("\n|    Result expected 0 got : %u", ASSERT_UINT(HIGHER_THAN, uvalue, uvalue));
+    #ifndef STOP_TEST_ON_FAILED
+    printf("\n| | | Result expected 1 got : %u", ASSERT_UINT(EQUAL, uvalue, uvalue));
+    printf("\n| | | Result expected 1 got : %u", ASSERT_UINT(LOWER_OR_EQUAL, uvalue, uvalue));
+    printf("\n| | | Result expected 1 got : %u", ASSERT_UINT(HIGHER_OR_EQUAL, uvalue, uvalue));
+    printf("\n| | | Result expected 0 got : %u", ASSERT_UINT(NOT_EQUAL, uvalue, uvalue));
+    printf("\n| | | Result expected 0 got : %u", ASSERT_UINT(LOWER_THAN, uvalue, uvalue));
+    printf("\n| | | Result expected 0 got : %u", ASSERT_UINT(HIGHER_THAN, uvalue, uvalue));
 
 
-    printf("\n|    Result expected 1 got : %u", ASSERT_INT(EQUAL, ivalue, ivalue));
-    printf("\n|    Result expected 1 got : %u", ASSERT_INT(LOWER_OR_EQUAL, ivalue, ivalue));
-    printf("\n|    Result expected 1 got : %u", ASSERT_INT(HIGHER_OR_EQUAL, ivalue, ivalue));
-    printf("\n|    Result expected 0 got : %u", ASSERT_INT(NOT_EQUAL, ivalue, ivalue));
-    printf("\n|    Result expected 0 got : %u", ASSERT_INT(LOWER_THAN, ivalue, ivalue));
-    printf("\n|    Result expected 0 got : %u", ASSERT_INT(HIGHER_THAN, ivalue, ivalue));
+    printf("\n| | | Result expected 1 got : %u", ASSERT_INT(EQUAL, ivalue, ivalue));
+    printf("\n| | | Result expected 1 got : %u", ASSERT_INT(LOWER_OR_EQUAL, ivalue, ivalue));
+    printf("\n| | | Result expected 1 got : %u", ASSERT_INT(HIGHER_OR_EQUAL, ivalue, ivalue));
+    printf("\n| | | Result expected 0 got : %u", ASSERT_INT(NOT_EQUAL, ivalue, ivalue));
+    printf("\n| | | Result expected 0 got : %u", ASSERT_INT(LOWER_THAN, ivalue, ivalue));
+    printf("\n| | | Result expected 0 got : %u", ASSERT_INT(HIGHER_THAN, ivalue, ivalue));
+    #else
+    ASSERT_UINT(EQUAL, uvalue, uvalue);
+    ASSERT_UINT(LOWER_OR_EQUAL, uvalue, uvalue);
+    ASSERT_UINT(HIGHER_OR_EQUAL, uvalue, uvalue);
+    ASSERT_UINT(NOT_EQUAL, uvalue, uvalue);
+    ASSERT_UINT(LOWER_THAN, uvalue, uvalue);
+    ASSERT_UINT(HIGHER_THAN, uvalue, uvalue);
+
+
+    ASSERT_INT(EQUAL, ivalue, ivalue);
+    ASSERT_INT(LOWER_OR_EQUAL, ivalue, ivalue);
+    ASSERT_INT(HIGHER_OR_EQUAL, ivalue, ivalue);
+    ASSERT_INT(NOT_EQUAL, ivalue, ivalue);
+    ASSERT_INT(LOWER_THAN, ivalue, ivalue);
+    ASSERT_INT(HIGHER_THAN, ivalue, ivalue);
+    #endif
+
 }
 
 void uint_format_assertion (Test *itself){
@@ -107,6 +134,7 @@ void rename_assertion (Test *itself){
 }
 
 int main (){
+    LET_init();
     Service mono_test = service_init("mono", empty_init);
     test_register(&mono_test, "mono_basic_assertion", mono_basic_assertion);
     service_runner(&mono_test);
@@ -128,6 +156,6 @@ int main (){
     test_register(&format_test, "rename_assertion", rename_assertion);
     test_register(&format_test, "str_assertion", str_assertion);
     service_runner(&format_test);
-
+    LET_end();
     return 0;
 }

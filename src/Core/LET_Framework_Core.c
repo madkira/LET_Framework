@@ -9,8 +9,7 @@
 // +--------------------------------------------------+
 // | LET_Framework_Core includes                      |
 // +--------------------------------------------------+
-#include "LET_Framework_Core.h"
-#include "LET_Framework_Assert.h"
+#include "LET_Framework.h"
 #include "LET_Framework_Result.h"
 
 // +--------------------------------------------------+
@@ -41,6 +40,13 @@
 // +--------------------------------------------------+
 // | LET_Framework_Core public functions declaration  |
 // +--------------------------------------------------+
+void LET_init(void){
+  LET_init_printer();
+}
+void LET_end(void){
+  LET_end_printer();
+}
+
 Service service_init(char* name, void (*func)(void)){
   Service new_service;
   new_service.suite_name = name;

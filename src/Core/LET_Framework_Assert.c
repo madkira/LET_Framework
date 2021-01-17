@@ -9,7 +9,7 @@
 // +----------------------------------------------------+
 // | LET_Framework_Assert includes                      |
 // +----------------------------------------------------+
-#include "LET_Framework_Assert.h"
+#include "LET_Framework.h"
 #include "LET_Framework_Result.h"
 #include "format_string.h"
 
@@ -64,8 +64,8 @@ ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion,
  #endif
   char str_expected[70];
   char str_obtained[70];
-  obtained = (BYTE == precision)?obtained&BYTE_MASK : (WORD == precision)?obtained&WORD_MASK : (DWORD == precision)? obtained&DWORD_MASK : obtained&QWORD_MASK;
-  expected = (BYTE == precision)?expected&BYTE_MASK : (WORD == precision)?expected&WORD_MASK : (DWORD == precision)? expected&DWORD_MASK : expected&QWORD_MASK;
+  obtained = obtained&((BYTE == precision)?BYTE_MASK:(WORD == precision)?WORD_MASK:(DWORD == precision)?DWORD_MASK:QWORD_MASK);
+  expected = expected&((BYTE == precision)?BYTE_MASK:(WORD == precision)?WORD_MASK:(DWORD == precision)?DWORD_MASK:QWORD_MASK);
   ASSERT_RESULT result = KO;
   switch (assertion) {
     case EQUAL:
@@ -95,30 +95,37 @@ ASSERT_RESULT ASSERT_uint(ASSERT_COMPARE assertion,
       break;
   }
 
-  if(KO == result) itself->result = KO;
-
-  switch (format){
-    case HEXADECIMAL:
-    case OCTAL:
-    case BINARY:
-      uint_to_base_string(str_expected, expected, format, precision);
-      uint_to_base_string(str_obtained, obtained, format, precision);
-      break;
-
-    case DECIMAL:
-    default:
-      uint_to_decimal_string(str_expected, expected);
-      uint_to_decimal_string(str_obtained, obtained);
-      break;
+  if(KO == result){
+    itself->result = KO;
+ #ifndef ONLY_FAILED_ASSERT // Compilation parameter to print not only failed assertion
   }
- #ifdef FILE_AND_LINE
-  uint_to_decimal_string(str_line, line);
  #endif
-  assert_printer(name, UINT, assertion, str_expected, str_obtained, result
- #ifdef FILE_AND_LINE
-                ,file, str_line
+
+    switch (format){
+      case HEXADECIMAL:
+      case OCTAL:
+      case BINARY:
+        uint_to_base_string(str_expected, expected, format, precision);
+        uint_to_base_string(str_obtained, obtained, format, precision);
+        break;
+
+      case DECIMAL:
+      default:
+        uint_to_decimal_string(str_expected, expected);
+        uint_to_decimal_string(str_obtained, obtained);
+        break;
+    }
+   #ifdef FILE_AND_LINE
+    uint_to_decimal_string(str_line, line);
+   #endif
+    assert_printer(name, UINT, assertion, str_expected, str_obtained, result
+   #ifdef FILE_AND_LINE
+                  ,file, str_line
+   #endif
+    );
+ #ifdef ONLY_FAILED_ASSERT // Compilation parameter to print only failed assertion
+  }
  #endif
-  );
   return result;
 }
 
@@ -162,18 +169,25 @@ ASSERT_RESULT ASSERT_int(ASSERT_COMPARE assertion,
       break;
   }
 
-  if(KO == result) itself->result = KO;
+  if(KO == result){
+    itself->result = KO;
+ #ifndef ONLY_FAILED_ASSERT // Compilation parameter to print not only failed assertion
+  }
+ #endif
 
-  int_to_string(str_expected, expected);
-  int_to_string(str_obtained, obtained);
- #ifdef FILE_AND_LINE
-  uint_to_decimal_string(str_line, line);
+    int_to_string(str_expected, expected);
+    int_to_string(str_obtained, obtained);
+   #ifdef FILE_AND_LINE
+    uint_to_decimal_string(str_line, line);
+   #endif
+    assert_printer(name, INT, assertion, str_expected, str_obtained, result
+   #ifdef FILE_AND_LINE
+                  ,file, str_line
+   #endif
+    );
+ #ifdef ONLY_FAILED_ASSERT // Compilation parameter to print only failed assertion
+  }
  #endif
-  assert_printer(name, INT, assertion, str_expected, str_obtained, result
- #ifdef FILE_AND_LINE
-                ,file, str_line
- #endif
-  );
   return result;
 }
 
@@ -212,8 +226,15 @@ ASSERT_RESULT ASSERT_float(ASSERT_COMPARE assertion,
       break;
   }
 
-  if(KO == result) itself->result = KO;
-//  assert_printer(name);
+  if(KO == result){
+    itself->result = KO;
+ #ifndef ONLY_FAILED_ASSERT // Compilation parameter to print not only failed assertion
+  }
+ #endif
+    // assert_printer(name);
+ #ifdef ONLY_FAILED_ASSERT // Compilation parameter to print only failed assertion
+  }
+ #endif
   return result;
 }
 
@@ -252,8 +273,15 @@ ASSERT_RESULT ASSERT_double(ASSERT_COMPARE assertion,
       break;
   }
 
-  if(KO == result) itself->result = KO;
-//  assert_printer(name);
+  if(KO == result){
+    itself->result = KO;
+ #ifndef ONLY_FAILED_ASSERT // Compilation parameter to print not only failed assertion
+  }
+ #endif
+    // assert_printer(name);
+ #ifdef ONLY_FAILED_ASSERT // Compilation parameter to print only failed assertion
+  }
+ #endif
   return result;
 }
 
@@ -285,43 +313,47 @@ ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion,
       break;
   }
 
-  if(KO == result) itself->result = KO;
-
-
-if(OCTAL == format){
-  format = HEXADECIMAL;
-}
-
-  if(HEXADECIMAL == format || BINARY == format){
-    uint16_t expected_size = str_size(expected);
-    uint16_t obtained_size = str_size(obtained);
-    expected_size = (expected_size/whitespace) + expected_size*((BINARY==format)?BYTE_DIGIT : HEXA_DIGIT);
-    obtained_size = (obtained_size/whitespace) + obtained_size*((BINARY==format)?BYTE_DIGIT : HEXA_DIGIT);
-
-    char convert_expected[expected_size];
-    char convert_obtained[obtained_size];
-    str_convert(convert_expected, expected, format, whitespace);
-    str_convert(convert_obtained, obtained, format, whitespace);
-
-   #ifdef FILE_AND_LINE
-    uint_to_decimal_string(str_line, line);
-   #endif
-    assert_printer(name, STR, assertion, convert_expected, convert_obtained, result
-   #ifdef FILE_AND_LINE
-                  ,file, str_line
-   #endif
-    );
-  }else{
-
-   #ifdef FILE_AND_LINE
-    uint_to_decimal_string(str_line, line);
-   #endif
-    assert_printer(name, STR, assertion, expected, obtained, result
-   #ifdef FILE_AND_LINE
-                  ,file, str_line
-   #endif
-      );
+  if(KO == result){
+    itself->result = KO;
+ #ifndef ONLY_FAILED_ASSERT // Compilation parameter to print not only failed assertion
   }
+ #endif
 
+    /* OCTAL NOT SUPPORTED YET*/
+    if(OCTAL == format){
+      format = HEXADECIMAL;
+    }
+
+   #ifdef FILE_AND_LINE
+    uint_to_decimal_string(str_line, line);
+   #endif
+
+    if(HEXADECIMAL == format || BINARY == format){
+      uint16_t expected_size = str_size(expected);
+      uint16_t obtained_size = str_size(obtained);
+      expected_size = (expected_size/whitespace) + expected_size*((BINARY==format)?BYTE_DIGIT : HEXA_DIGIT);
+      obtained_size = (obtained_size/whitespace) + obtained_size*((BINARY==format)?BYTE_DIGIT : HEXA_DIGIT);
+
+      char convert_expected[expected_size];
+      char convert_obtained[obtained_size];
+      str_convert(convert_expected, expected, format, whitespace);
+      str_convert(convert_obtained, obtained, format, whitespace);
+
+      assert_printer(name, STR, assertion, convert_expected, convert_obtained, result
+    #ifdef FILE_AND_LINE
+                    ,file, str_line
+    #endif
+      );
+    }else{
+
+      assert_printer(name, STR, assertion, expected, obtained, result
+    #ifdef FILE_AND_LINE
+                    ,file, str_line
+    #endif
+        );
+    }
+ #ifdef ONLY_FAILED_ASSERT // Compilation parameter to print only failed assertion
+  }
+ #endif
   return result;
 }

@@ -10,13 +10,15 @@
 // +------------------------------------+
 // | LET_Framework Includes             |
 // +------------------------------------+
-// Temporary Shared library Might be removed for no dependency purpose
 #include "stdint.h"
 
 // +------------------------------------+
 // | LET_Framework Macros               |
 // +------------------------------------+
+#ifndef MAX_TESTS
 #define MAX_TESTS 10
+#endif
+
 #define GENERATE_ENUM(ENUM) ENUM,
 
 // +------------------------------------+
@@ -99,11 +101,16 @@ typedef struct LET_Framework_Service {
 #else
 #define ASSERT_UINT_CALL(...) ASSERT_uint(__VA_ARGS__, itself)
 #endif
+#ifdef STOP_TEST_ON_FAILED
+#define ASSERT_UINT5(a, b, ...) if(KO==ASSERT_UINT_CALL(a, b, __VA_ARGS__, #b))return
+#else
 #define ASSERT_UINT5(a, b, ...) ASSERT_UINT_CALL(a, b, __VA_ARGS__, #b)
+#endif
 #define ASSERT_UINT4(...) ASSERT_UINT5(__VA_ARGS__, DECIMAL)
 #define ASSERT_UINT3(...) ASSERT_UINT4(__VA_ARGS__, DWORD)
 #define ASSERT_UINT_FUNC(_1, _2, _3, _4, _5, _6, _7, NAME, ...) NAME
 #define ASSERT_UINT(...) ASSERT_UINT_FUNC(__VA_ARGS__, ASSERT_uint, ASSERT_UINT_CALL, ASSERT_UINT5, ASSERT_UINT4, ASSERT_UINT3, ...)(__VA_ARGS__)
+
 
 
 #ifdef FILE_AND_LINE
@@ -111,7 +118,11 @@ typedef struct LET_Framework_Service {
 #else
 #define ASSERT_INT_CALL(...) ASSERT_int(__VA_ARGS__, itself)
 #endif
+#ifdef STOP_TEST_ON_FAILED
+#define ASSERT_INT3(a, b, ...) if(KO==ASSERT_INT_CALL(a, b, __VA_ARGS__, #b))return
+#else
 #define ASSERT_INT3(a, b, ...) ASSERT_INT_CALL(a, b, __VA_ARGS__, #b)
+#endif
 #define ASSERT_INT_FUNC(_1, _2, _3, _4, _5, NAME, ...) NAME
 #define ASSERT_INT(...) ASSERT_INT_FUNC(__VA_ARGS__, ASSERT_int, ASSERT_INT_CALL, ASSERT_INT3, ...)(__VA_ARGS__)
 
@@ -122,7 +133,11 @@ typedef struct LET_Framework_Service {
 #else
 #define ASSERT_FLOAT_CALL(...) ASSERT_float(__VA_ARGS__, itself)
 #endif
+#ifdef STOP_TEST_ON_FAILED
+#define ASSERT_FLOAT6(a, b, ...) if(KO==ASSERT_FLOAT_CALL(a, b, __VA_ARGS__, #b))return
+#else
 #define ASSERT_FLOAT6(a, b, ...) ASSERT_FLOAT_CALL(a, b, __VA_ARGS__, #b)
+#endif
 #define ASSERT_FLOAT5(...) ASSERT_FLOAT6(__VA_ARGS__, DECIMAL)
 #define ASSERT_FLOAT4(...) ASSERT_FLOAT5(__VA_ARGS__, 6)
 #define ASSERT_FLOAT3(...) ASSERT_FLOAT4(__VA_ARGS__, 0.1)
@@ -136,7 +151,11 @@ typedef struct LET_Framework_Service {
 #else
 #define ASSERT_DOUBLE_CALL(...) ASSERT_double(__VA_ARGS__, itself)
 #endif
+#ifdef STOP_TEST_ON_FAILED
+#define ASSERT_DOUBLE6(a, b, ...) if(KO==ASSERT_DOUBLE_CALL(a, b, __VA_ARGS__, #b))return
+#else
 #define ASSERT_DOUBLE6(a, b, ...) ASSERT_DOUBLE_CALL(a, b, __VA_ARGS__, #b)
+#endif
 #define ASSERT_DOUBLE5(...) ASSERT_DOUBLE6(__VA_ARGS__, DECIMAL)
 #define ASSERT_DOUBLE4(...) ASSERT_DOUBLE5(__VA_ARGS__, 10)
 #define ASSERT_DOUBLE3(...) ASSERT_DOUBLE4(__VA_ARGS__, 0.1)
@@ -150,7 +169,11 @@ typedef struct LET_Framework_Service {
 #else
 #define ASSERT_STR_CALL(...) ASSERT_str(__VA_ARGS__, itself)
 #endif
+#ifdef STOP_TEST_ON_FAILED
+#define ASSERT_STR5(a, b, ...) if(KO==ASSERT_STR_CALL(a, b, __VA_ARGS__, #b))return
+#else
 #define ASSERT_STR5(a, b, ...) ASSERT_STR_CALL(a, b, __VA_ARGS__, #b)
+#endif
 #define ASSERT_STR4(...) ASSERT_STR5(__VA_ARGS__, STRING)
 #define ASSERT_STR3(...) ASSERT_STR4(__VA_ARGS__, DWORD)
 #define ASSERT_STR_FUNC(_1, _2, _3, _4, _5, _6, _7, NAME, ...) NAME
@@ -224,6 +247,8 @@ ASSERT_RESULT ASSERT_str(ASSERT_COMPARE assertion,
 #endif
 );
 
+void LET_init(void);
+void LET_end(void);
 Service service_init(char* name, void (*func)(void));
 CORE_EXCEPTION test_register(Service *service, char * name, void (*func)(Test *));
 void service_runner(Service *service);

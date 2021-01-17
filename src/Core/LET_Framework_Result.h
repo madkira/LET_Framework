@@ -46,6 +46,8 @@ typedef enum {
 // +-------------------------------------------+
 // | LET_Framework_Result Functions Definition |
 // +-------------------------------------------+
+void LET_init_printer(void);
+void LET_end_printer(void);
 void service_init_printer(char *name, uint8_t test_number);
 void service_end_printer(char *name);
 void test_init_printer(char *name);
