@@ -1,6 +1,6 @@
 # LET_Framework
 Light Embedded Testing Framework
-
+![CI](https://github.com/madkira/LET_Framework/workflows/CI/badge.svg) [![codecov](https://codecov.io/gh/madkira/LET_Framework/branch/main/graph/badge.svg?token=C6TTPXTXQ9)](https://codecov.io/gh/madkira/LET_Framework)
 ## Description
 This Testing framework is simply a way to normalise Test writing and result generating. It is made by providing a way to write Assertion that compare an expected value with the compute/obtained one.
 This Assertions are organized in specific function that represent one Test. Usually the Test function contains the call to the function that is under test before calling assertions on the different values that need to be validated.
