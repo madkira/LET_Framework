@@ -6,7 +6,7 @@ void empty_init (void){
 }
 
 void LET_Framework_printer (const char * data){
-    printf(data);
+    printf("%s",data);
 }
 
 void mono_basic_assertion (Test *itself){

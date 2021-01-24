@@ -1,0 +1,32 @@
+name: CI
+
+on: [push]
+
+jobs:
+    build_firmware:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+
+      - name: Pull image
+        run: docker pull nedseb/arm-gcc-none-eabi:latest
+
+      - name: Start container
+        run: docker run --user=1001 -it -d --name builder -e CODECOV_TOKEN="$CODECOV_TOKEN" -v $GITHUB_WORKSPACE:/src -w /src nedseb/arm-gcc-none-eabi:latest
+        env:
+          CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
+
+      - name: Create_build_env
+        run: docker exec builder /bin/bash -c 'pwd && ls -la && mkdir build'
+
+      - name: Build
+        run: docker exec builder /bin/bash -c 'cd build && cmake -DBUILD_TESTING=ON -DFORMAT=TEXT .. && make'
+
+      - name: Run
+        run: docker exec builder /bin/bash -c 'cd build && ./test/LET_FRAMEWORK_test'
+
+      - name: Coverage genenrate result
+        run: docker exec builder /bin/bash -c 'cd build && make gcov'
+
+      - name: Codecov upload
+        run: docker exec builder /bin/bash -c 'cd build && /bin/bash <(wget -q -O - https://codecov.io/bash)'
