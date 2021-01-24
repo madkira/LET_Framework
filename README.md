@@ -72,7 +72,8 @@ cmake -DBUILD_TESTING=[ON/OFF] ..
 ```
 
 ##### FORMAT
-Allow to change the printer format in order to facilitate the integration in the automation process available format XML TEXT
+Allow to change the printer format in order to facilitate the integration in the automation process available format JUNIT XML TEXT
+JUNIT format force STOP_TEST_ON_FAILED and ONLY_FAILED_ASSERT to ON
 There is also a CUSTOM format that is allowed if specific format is required and can be implemented inside the folder ```src/Data_Format/custom/```
 
 _Default if not specified TEXT_
@@ -90,6 +91,7 @@ cmake -DFILE_AND_LINE=[ON/OFF] ..
 
 ##### ONLY_FAILED_ASSERT
 This directive force the framework to only print the failed assertions
+This option if force to ON if the format is JUNIT
 
 _Default if not specified OFF_
 ```
@@ -98,9 +100,9 @@ cmake -DONLY_FAILED_ASSERT=[ON/OFF] ..
 
 ##### STOP_TEST_ON_FAILED
 This directive force the framework to stop the current test and pass to the next one on the first failed assertion
+This option if force to ON if the format is JUNIT
 
 _Default if not specified OFF_
 ```
 cmake -DSTOP_TEST_ON_FAILED=[ON/OFF] ..
 ```
-

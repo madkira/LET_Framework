@@ -12,12 +12,40 @@
 #include "stdint.h"
 
 #include "LET_Framework_Result.h"
-#include "format_string.h"
+#include "LET_util_format_string.h"
+#include "LET_util_xml_format.h"
 
 // +------------------------------------------+
 // | xml_format macros                        |
 // +------------------------------------------+
-/*Not Used*/
+#define BALISE_LET_RUN "LET_RUN"
+
+#define BALISE_SERVICE "SERVICE"
+#define NAME_PARAMETER_SERVICE "S_NAME"
+#define NB_TEST_PARAMETER_SERVICE "NB_TEST"
+
+#define BALISE_TEST "TEST"
+#define NAME_PARAMETER_TEST "T_NAME"
+
+#define BALISE_RESULT "RESULT"
+#define RESULT_OK "PASSED"
+#define RESULT_KO "FAILED"
+
+#define BALISE_ASSERT "ASSERT"
+#define NAME_PARAMETER_ASSERT "A_NAME"
+#define FILE_PARAMETER_ASSERT "FILE"
+#define LINE_PARAMETER_ASSERT "LINE"
+#define TYPE_PARAMETER_ASSERT "TYPE"
+#define COMPARE_PARAMETER_ASSERT "COMPARE"
+#define EXPECTED_PARAMETER_ASSERT "EXPECTED"
+#define OBTAINED_PARAMETER_ASSERT "OBTAINED"
+#define VALID_PARAMETER_ASSERT "VALID"
+
+
+
+#define BALISE_ANNOTATION "NOTE"
+#define BALISE_ERROR "ERROR"
+
 
 // +------------------------------------------+
 // | xml_format types                         |
@@ -37,28 +65,7 @@ extern void LET_Framework_printer(const char * data);
 // +------------------------------------------+
 // | xml_format private functions declaration |
 // +------------------------------------------+
-void open_balise(char *balise_name, uint8_t new_line, uint8_t tabulation, uint8_t close){
-  if(new_line) LET_Framework_printer("\n");
-  for(uint8_t i = 0; i<tabulation; i++){
-    LET_Framework_printer("\t");
-  }
-  LET_Framework_printer("<");
-  if(close) LET_Framework_printer("/");
-  LET_Framework_printer(balise_name);
-}
-
-void close_balise(uint8_t standalone){
-  if(standalone) LET_Framework_printer("/");
-  LET_Framework_printer(">");
-}
-
-void add_parameter(const char *parameter_name, const char* value){
-  LET_Framework_printer(" ");
-  LET_Framework_printer(parameter_name);
-  LET_Framework_printer("=\"");
-  LET_Framework_printer(value);
-  LET_Framework_printer("\"");
-}
+/*Not Used*/
 
 // +------------------------------------------+
 // | xml_format private functions definition  |
@@ -80,7 +87,7 @@ void LET_end_printer(void){
 }
 
 void service_init_printer(char* name, uint8_t test_number){
-  char number[5] = {'\n'};
+  char number[5] = {'\0'};
   uint_to_decimal_string(number, test_number);
   open_balise(BALISE_SERVICE, 1, 1, 0);
   add_parameter(NAME_PARAMETER_SERVICE, name);
@@ -88,7 +95,7 @@ void service_init_printer(char* name, uint8_t test_number){
   close_balise(0);
 }
 
-void service_end_printer(char* name){
+void service_end_printer(void){
   open_balise(BALISE_SERVICE, 1, 1, 1);
   close_balise(0);
 }
@@ -99,7 +106,7 @@ void test_init_printer(char* name){
   close_balise(0);
 }
 
-void test_end_printer(char* name, ASSERT_RESULT result){
+void test_end_printer(ASSERT_RESULT result){
   open_balise(BALISE_RESULT, 1, 3, 0);
   close_balise(0);
   LET_Framework_printer((OK==result)?RESULT_OK:RESULT_KO);

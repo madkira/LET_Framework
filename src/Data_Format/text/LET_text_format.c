@@ -12,7 +12,7 @@
 #include "stdint.h"
 
 #include "LET_Framework_Result.h"
-#include "format_string.h"
+#include "LET_util_format_string.h"
 
 // +-------------------------------------------+
 // | text_format macros                        |
@@ -63,10 +63,8 @@ void service_init_printer(char* name, uint8_t test_number){
   LET_Framework_printer((test_number>1)?" tests :":" test :");
 }
 
-void service_end_printer(char* name){
-  LET_Framework_printer("\nService End \"");
-  LET_Framework_printer(name);
-  LET_Framework_printer("\"\n");
+void service_end_printer(void){
+  LET_Framework_printer("\nService End\n");
 }
 
 void test_init_printer(char* name){
@@ -75,10 +73,8 @@ void test_init_printer(char* name){
   LET_Framework_printer("\"");
 }
 
-void test_end_printer(char* name, ASSERT_RESULT result){
-  LET_Framework_printer("\n| Test End \"");
-  LET_Framework_printer(name);
-  LET_Framework_printer("\" : ");
+void test_end_printer(ASSERT_RESULT result){
+  LET_Framework_printer("\n| Test End : ");
   LET_Framework_printer((OK==result)?"PASSED":"FAILED");
 }
 

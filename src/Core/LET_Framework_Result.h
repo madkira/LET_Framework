@@ -49,9 +49,13 @@ typedef enum {
 void LET_init_printer(void);
 void LET_end_printer(void);
 void service_init_printer(char *name, uint8_t test_number);
-void service_end_printer(char *name);
+void service_end_printer(void);
+#ifdef JUNIT
+void test_init_printer(char *name, char *service_name);
+#else
 void test_init_printer(char *name);
-void test_end_printer(char* name, ASSERT_RESULT result);
+#endif
+void test_end_printer(ASSERT_RESULT result);
 void assert_printer(char *name,
                   ASSERT_TYPE type,
                   ASSERT_COMPARE compare,

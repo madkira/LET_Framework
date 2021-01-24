@@ -11,7 +11,7 @@
 // +----------------------------------------------------+
 // Temporary Shared library Might be removed for no dependency purpose
 #include "stdint.h"
-#include "format_string.h"
+#include "LET_util_format_string.h"
 #include "LET_Framework_Result.h"
 
 // +----------------------------------------------------+

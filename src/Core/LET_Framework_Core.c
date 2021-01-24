@@ -70,10 +70,14 @@ void service_runner(Service *service){
   service_init_printer(service->suite_name, service->test_num);
   for(uint8_t  i = 0; i < service->test_num; i++){
     current_test = &service->test_list[i];
+    #ifdef JUNIT
+    test_init_printer(current_test->test_name, service->suite_name);
+    #else
     test_init_printer(current_test->test_name);
+    #endif
     service->init_func();
     current_test->main_func(current_test);
-    test_end_printer(current_test->test_name, current_test->result);
+    test_end_printer(current_test->result);
   }
-  service_end_printer(service->suite_name);
+  service_end_printer();
 }

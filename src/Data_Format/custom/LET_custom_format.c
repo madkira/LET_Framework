@@ -12,7 +12,7 @@
 #include "stdint.h"
 
 #include "LET_Framework_Result.h"
-#include "format_string.h"
+#include "LET_util_format_string.h"
 
 // +---------------------------------------------+
 // | custom_format macros                        |
@@ -32,7 +32,7 @@
 // +---------------------------------------------+
 // | custom_format extern functions definition   |
 // +---------------------------------------------+
-extern void LET_Framework_printer(char * data);
+extern void LET_Framework_printer (const char * data);
 
 // +---------------------------------------------+
 // | custom_format private functions definition  |
@@ -48,6 +48,14 @@ extern void LET_Framework_printer(char * data);
 // +---------------------------------------------+
 // | custom_format public functions declaration  |
 // +---------------------------------------------+
+void LET_init_printer(void){
+  /*TODO*/
+}
+
+void LET_end_printer(void){
+  /*TODO*/
+}
+
 void service_init_printer(char* name, uint8_t test_number){
   /*TODO*/
 }

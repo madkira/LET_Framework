@@ -23,31 +23,34 @@ endif()
 
 set(INCLUDE_FOLDER "${CMAKE_CURRENT_LIST_DIR}/../include")
 
-
-if(FORMAT STREQUAL XML)
+if(FORMAT STREQUAL JUNIT)
+    set(FORMAT "junit")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DJUNIT")
+    set(FORMAT_SOURCE_FILES ${CMAKE_CURRENT_LIST_DIR}/Data_Format/util/LET_util_xml_fomat.c)
+elseif(FORMAT STREQUAL XML)
     set(FORMAT "xml")
+    set(FORMAT_SOURCE_FILES ${CMAKE_CURRENT_LIST_DIR}/Data_Format/util/LET_util_xml_fomat.c)
 elseif(FORMAT STREQUAL CUSTOM)
     set(FORMAT "custom")
 else()
     if(NOT FORMAT STREQUAL TEXT)
-        message("warning : FORMAT not specified or eronated default set to TEXT. Allowed value [JSON/XML/TEXT/CUSTOM] ")
+        message("warning : FORMAT not specified or eronated default set to TEXT. Allowed value [JSON/JUNIT/XML/TEXT/CUSTOM] ")
     endif()
     set(FORMAT "text")
 endif()
 
-set(FORMAT_SOURCE_FOLDER "${CMAKE_CURRENT_LIST_DIR}/Data_Format/${FORMAT}/${FORMAT}_format.c")
+set(FORMAT_SOURCE_FILES ${FORMAT_SOURCE_FILES} ${CMAKE_CURRENT_LIST_DIR}/Data_Format/${FORMAT}/LET_${FORMAT}_format.c)
 
 include_directories(${INCLUDE_FOLDER}
                     ${CMAKE_CURRENT_LIST_DIR}/Core
                     ${CMAKE_CURRENT_LIST_DIR}/Data_Format/util
-                    ${FORMAT_INCLUDE_FOLDER}
                 )
 
 add_library(${PROJECT_NAME} STATIC
             ${CMAKE_CURRENT_LIST_DIR}/Core/LET_Framework_Assert.c
             ${CMAKE_CURRENT_LIST_DIR}/Core/LET_Framework_Core.c
-            ${CMAKE_CURRENT_LIST_DIR}/Data_Format/util/format_string.c
-            ${FORMAT_SOURCE_FOLDER}
+            ${CMAKE_CURRENT_LIST_DIR}/Data_Format/util/LET_util_format_string.c
+            ${FORMAT_SOURCE_FILES}
         )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

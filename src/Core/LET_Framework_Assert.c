@@ -11,7 +11,7 @@
 // +----------------------------------------------------+
 #include "LET_Framework.h"
 #include "LET_Framework_Result.h"
-#include "format_string.h"
+#include "LET_util_format_string.h"
 
 // +----------------------------------------------------+
 // | LET_Framework_Assert macros                        |
