@@ -18,33 +18,33 @@
 // +------------------------------------------+
 // | xml_format macros                        |
 // +------------------------------------------+
-#define BALISE_LET_RUN "LET_RUN"
+#define LET_BALISE_LET_RUN "LET_RUN"
 
-#define BALISE_SERVICE "SERVICE"
-#define NAME_PARAMETER_SERVICE "S_NAME"
-#define NB_TEST_PARAMETER_SERVICE "NB_TEST"
+#define LET_BALISE_SERVICE "SERVICE"
+#define LET_NAME_PARAMETER_SERVICE "S_NAME"
+#define LET_NB_TEST_PARAMETER_SERVICE "NB_TEST"
 
-#define BALISE_TEST "TEST"
-#define NAME_PARAMETER_TEST "T_NAME"
+#define LET_BALISE_TEST "TEST"
+#define LET_NAME_PARAMETER_TEST "T_NAME"
 
-#define BALISE_RESULT "RESULT"
-#define RESULT_OK "PASSED"
-#define RESULT_KO "FAILED"
+#define LET_BALISE_RESULT "RESULT"
+#define LET_RESULT_OK "PASSED"
+#define LET_RESULT_KO "FAILED"
 
-#define BALISE_ASSERT "ASSERT"
-#define NAME_PARAMETER_ASSERT "A_NAME"
-#define FILE_PARAMETER_ASSERT "FILE"
-#define LINE_PARAMETER_ASSERT "LINE"
-#define TYPE_PARAMETER_ASSERT "TYPE"
-#define COMPARE_PARAMETER_ASSERT "COMPARE"
-#define EXPECTED_PARAMETER_ASSERT "EXPECTED"
-#define OBTAINED_PARAMETER_ASSERT "OBTAINED"
-#define VALID_PARAMETER_ASSERT "VALID"
+#define LET_BALISE_ASSERT "ASSERT"
+#define LET_NAME_PARAMETER_ASSERT "A_NAME"
+#define LET_FILE_PARAMETER_ASSERT "FILE"
+#define LET_LINE_PARAMETER_ASSERT "LINE"
+#define LET_TYPE_PARAMETER_ASSERT "TYPE"
+#define LET_COMPARE_PARAMETER_ASSERT "COMPARE"
+#define LET_EXPECTED_PARAMETER_ASSERT "EXPECTED"
+#define LET_OBTAINED_PARAMETER_ASSERT "OBTAINED"
+#define LET_VALID_PARAMETER_ASSERT "VALID"
 
 
 
-#define BALISE_ANNOTATION "NOTE"
-#define BALISE_ERROR "ERROR"
+#define LET_BALISE_ANNOTATION "NOTE"
+#define LET_BALISE_ERROR "ERROR"
 
 
 // +------------------------------------------+
@@ -76,67 +76,71 @@ extern void LET_Framework_printer(const char * data);
 // | xml_format public functions definition  |
 // +-----------------------------------------+
 void LET_init_printer(void){
-  open_balise(BALISE_LET_RUN, 0, 0, 0);
-  close_balise(0);
+  LET_xml_open_balise(LET_BALISE_LET_RUN, 0, 0, 0);
+  LET_xml_close_balise(0);
 }
 
 void LET_end_printer(void){
-  open_balise(BALISE_LET_RUN, 1, 0, 1);
-  close_balise(0);
+  LET_xml_open_balise(LET_BALISE_LET_RUN, 1, 0, 1);
+  LET_xml_close_balise(0);
   LET_Framework_printer("\n");
 }
 
-void service_init_printer(char* name, uint8_t test_number){
+void LET_service_init_printer(char* name, uint8_t test_number){
   char number[5] = {'\0'};
-  uint_to_decimal_string(number, test_number);
-  open_balise(BALISE_SERVICE, 1, 1, 0);
-  add_parameter(NAME_PARAMETER_SERVICE, name);
-  add_parameter(NB_TEST_PARAMETER_SERVICE, number);
-  close_balise(0);
+  LET_uint_to_decimal_string(number, test_number);
+  LET_xml_open_balise(LET_BALISE_SERVICE, 1, 1, 0);
+  LET_xml_add_parameter(LET_NAME_PARAMETER_SERVICE, name);
+  LET_xml_add_parameter(LET_NB_TEST_PARAMETER_SERVICE, number);
+  LET_xml_close_balise(0);
 }
 
-void service_end_printer(void){
-  open_balise(BALISE_SERVICE, 1, 1, 1);
-  close_balise(0);
+void LET_service_end_printer(void){
+  LET_xml_open_balise(LET_BALISE_SERVICE, 1, 1, 1);
+  LET_xml_close_balise(0);
 }
 
-void test_init_printer(char* name){
-  open_balise(BALISE_TEST, 1, 2, 0);
-  add_parameter(NAME_PARAMETER_TEST, name);
-  close_balise(0);
+void LET_test_init_printer(char* name){
+  LET_xml_open_balise(LET_BALISE_TEST, 1, 2, 0);
+  LET_xml_add_parameter(LET_NAME_PARAMETER_TEST, name);
+  LET_xml_close_balise(0);
 }
 
-void test_end_printer(ASSERT_RESULT result){
-  open_balise(BALISE_RESULT, 1, 3, 0);
-  close_balise(0);
-  LET_Framework_printer((OK==result)?RESULT_OK:RESULT_KO);
-  open_balise(BALISE_RESULT, 0, 0, 1);
-  close_balise(0);
-  open_balise(BALISE_TEST, 1, 2, 1);
-  close_balise(0);
+void LET_test_end_printer(LET_ASSERT_RESULT result){
+  LET_xml_open_balise(LET_BALISE_RESULT, 1, 3, 0);
+  LET_xml_close_balise(0);
+  LET_Framework_printer((LET_OK==result)?LET_RESULT_OK:LET_RESULT_KO);
+  LET_xml_open_balise(LET_BALISE_RESULT, 0, 0, 1);
+  LET_xml_close_balise(0);
+  LET_xml_open_balise(LET_BALISE_TEST, 1, 2, 1);
+  LET_xml_close_balise(0);
 }
 
-void assert_printer(char *name,
-                  ASSERT_TYPE type,
-                  ASSERT_COMPARE compare,
+void LET_assert_printer(char *name,
+                  LET_ASSERT_TYPE type,
+                  LET_ASSERT_COMPARE compare,
                   char *expected,
                   char *obtained,
-                  ASSERT_RESULT result
- #ifdef FILE_AND_LINE
+                  LET_ASSERT_RESULT result
+ #ifdef LET_FILE_AND_LINE
                   ,char *file
-                  ,char *line
+                  ,uint32_t line
  #endif
 ){
-  open_balise(BALISE_ASSERT, 1, 3, 0);
- #ifdef FILE_AND_LINE
-  add_parameter(FILE_PARAMETER_ASSERT, file);
-  add_parameter(LINE_PARAMETER_ASSERT, line);
+ #ifdef LET_FILE_AND_LINE
+  char str_line[25];
+  LET_uint_to_decimal_string(str_line, line);
  #endif
-  add_parameter(NAME_PARAMETER_ASSERT, name);
-  add_parameter(TYPE_PARAMETER_ASSERT, ASSERT_TYPE_STRING[type]);
-  add_parameter(COMPARE_PARAMETER_ASSERT, ASSERT_COMPARE_STRING[compare]);
-  add_parameter(EXPECTED_PARAMETER_ASSERT, expected);
-  add_parameter(OBTAINED_PARAMETER_ASSERT, obtained);
-  add_parameter(VALID_PARAMETER_ASSERT, ASSERT_RESULT_STRING[result]);
-  close_balise(1);
+  LET_xml_open_balise(LET_BALISE_ASSERT, 1, 3, 0);
+ #ifdef LET_FILE_AND_LINE
+  LET_xml_add_parameter(FILE_PARAMETER_ASSERT, file);
+  LET_xml_add_parameter(LINE_PARAMETER_ASSERT, str_line);
+ #endif
+  LET_xml_add_parameter(LET_NAME_PARAMETER_ASSERT, name);
+  LET_xml_add_parameter(LET_TYPE_PARAMETER_ASSERT, LET_ASSERT_TYPE_STRING[type]);
+  LET_xml_add_parameter(LET_COMPARE_PARAMETER_ASSERT, LET_ASSERT_COMPARE_STRING[compare]);
+  LET_xml_add_parameter(LET_EXPECTED_PARAMETER_ASSERT, expected);
+  LET_xml_add_parameter(LET_OBTAINED_PARAMETER_ASSERT, obtained);
+  LET_xml_add_parameter(LET_VALID_PARAMETER_ASSERT, LET_ASSERT_RESULT_STRING[result]);
+  LET_xml_close_balise(1);
 }

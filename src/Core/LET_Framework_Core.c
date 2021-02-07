@@ -47,37 +47,41 @@ void LET_end(void){
   LET_end_printer();
 }
 
-Service service_init(char* name, void (*func)(void)){
-  Service new_service;
+LET_Service LET_service_init(char* name, void (*func)(void)){
+  LET_Service new_service;
   new_service.suite_name = name;
   new_service.init_func = func;
   new_service.test_num = 0;
   return new_service;
 }
 
-CORE_EXCEPTION test_register(Service *service, char * name, void (*func)(Test *)){
-  Test new_test;
+LET_CORE_EXCEPTION LET_test_register(LET_Service *service, char * name, void (*func)(LET_Test *)){
+  LET_Test new_test;
   new_test.test_name = name;
   new_test.main_func = func;
-  new_test.result = OK;
-  if(service->test_num >= MAX_TESTS) return CORE_KO;
+  new_test.result = LET_OK;
+  if(service->test_num >= LET_MAX_TESTS) return LET_CORE_KO;
   service->test_list[service->test_num++] = new_test;
-  return CORE_OK;
+  return LET_CORE_OK;
 }
 
-void service_runner(Service *service){
-  Test * current_test;
-  service_init_printer(service->suite_name, service->test_num);
+void LET_service_runner(LET_Service *service){
+  LET_Test * current_test;
+  LET_service_init_printer(service->suite_name, service->test_num);
   for(uint8_t  i = 0; i < service->test_num; i++){
     current_test = &service->test_list[i];
-    #ifdef JUNIT
-    test_init_printer(current_test->test_name, service->suite_name);
-    #else
-    test_init_printer(current_test->test_name);
-    #endif
+    LET_test_init_printer(current_test->test_name
+      #ifdef LET_JUNIT
+                          ,service->suite_name
+      #endif
+     );
     service->init_func();
     current_test->main_func(current_test);
-    test_end_printer(current_test->result);
+    LET_test_end_printer(
+      #ifndef LET_JUNIT
+                        current_test->result
+      #endif
+     );
   }
-  service_end_printer();
+  LET_service_end_printer();
 }

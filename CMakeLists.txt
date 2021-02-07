@@ -16,19 +16,19 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif()
 
 if(FILE_AND_LINE)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DFILE_AND_LINE")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLET_FILE_AND_LINE")
 endif()
 
 if((FORMAT STREQUAL JUNIT) OR ONLY_FAILED_ASSERT)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DONLY_FAILED_ASSERT")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLET_ONLY_FAILED_ASSERT")
 endif()
 
 if((FORMAT STREQUAL JUNIT) OR STOP_TEST_ON_FAILED)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSTOP_TEST_ON_FAILED")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLET_STOP_TEST_ON_FAILED")
 endif()
 
 if(MAX_TESTS)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DMAX_TESTS=${MAX_TESTS}")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLET_MAX_TESTS=${MAX_TESTS}")
 endif()
 
 ###############################
@@ -54,5 +54,7 @@ if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND 
     )
     add_custom_target(gcov
         COMMAND gcov ${CMAKE_CURRENT_LIST_DIR}/src/*.c -o ${GENERATED_COVERAGE_DIR}/*.c.gcno -o ${GENERATED_COVERAGE_DIR}/*.c.gcda)
-    add_subdirectory(test)
+    add_subdirectory(exemple)
+    add_subdirectory(test/Data_Format/util)
+    add_subdirectory(test/Data_Format/junit)
 endif()

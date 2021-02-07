@@ -1,6 +1,8 @@
 # LET_Framework
 Light Embedded Testing Framework
+
 ![CI](https://github.com/madkira/LET_Framework/workflows/CI/badge.svg) [![codecov](https://codecov.io/gh/madkira/LET_Framework/branch/main/graph/badge.svg?token=C6TTPXTXQ9)](https://codecov.io/gh/madkira/LET_Framework)
+
 ## Description
 This Testing framework is simply a way to normalise Test writing and result generating. It is made by providing a way to write Assertion that compare an expected value with the compute/obtained one.
 This Assertions are organized in specific function that represent one Test. Usually the Test function contains the call to the function that is under test before calling assertions on the different values that need to be validated.
@@ -15,20 +17,25 @@ Assertion exist in 5 types __uint int float double str__ (float and double not y
 * the expected value
 
 Depending on the assetion type the optionals parameters changes and have differents purposes
+
 ##### UINT
-```ASSERT_UINT(COMPARE, OBTAINED, EXPECTED, PRECISION, FORMAT, NAME)```
+```LET_ASSERT_UINT(COMPARE, OBTAINED, EXPECTED, PRECISION, FORMAT, NAME)```
 * PRECISION : allow to define the number of bytes uint8_t to uint64_t
 * FORMAT : permit to transform the print format from Binary or Hexadecimal
 * NAME : rename the assertion for better test information
+
 ##### INT
-```ASSERT_INT(COMPARE, OBTAINED, EXPECTED, NAME)```
+```LET_ASSERT_INT(COMPARE, OBTAINED, EXPECTED, NAME)```
 * NAME : rename the assertion for better test information
+
 ##### FLOAT
 TODO
+
 ##### DOUBLE
 TODO
+
 ##### STR
-```ASSERT_STR(COMPARE, OBTAINED, EXPECTED, WHITESPACE, FORMAT, NAME)```
+```LET_ASSERT_STR(COMPARE, OBTAINED, EXPECTED, WHITESPACE, FORMAT, NAME)```
 * WHITESPACE : works only with specific format in order to space the data for non literal string
 * FORMAT : permit to transform the print format from literal string to some sort of "DUMP memory like"
 * NAME : rename the assertion for better test information

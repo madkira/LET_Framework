@@ -18,25 +18,24 @@
 // +---------------------------------------------+
 // | junit_format macros                         |
 // +---------------------------------------------+
-#define TESTSUITE_BALISE              "testsuite"
-#define TESTSUITE_TESTNB_PARAMETER    "tests"
-#define TESTSUITE_NAME_PARAMETER      "name"
+#define LET_TESTSUITE_BALISE              "testsuite"
+#define LET_TESTSUITES_BALISE              LET_TESTSUITE_BALISE "s"
+#define LET_TESTSUITE_TESTNB_PARAMETER    "tests"
+#define LET_TESTSUITE_NAME_PARAMETER      "name"
 
-#define TESTCASE_BALISE               "testcase"
-#define TESTCASE_NAME_PARAMETER       "name"
-#define TESTCASE_CLASSNAME_PARAMETER  "classname"
+#define LET_TESTCASE_BALISE               "testcase"
+#define LET_TESTCASE_NAME_PARAMETER       "name"
+#define LET_TESTCASE_CLASSNAME_PARAMETER  "classname"
 
-#define FAILURE_BALISE                "failure"
-#define FAILURE_TYPE_PARAMETER        "type"
-#define FAILURE_MESSAGE_PARAMETER     "message"
-#define FAILURE_DATA_NEWLINE          "\n\t\t\t\t"
-#define FILE_PARAMETER_ASSERT         "FILE : "
-#define LINE_PARAMETER_ASSERT         "LINE : "
-#define TYPE_PARAMETER_ASSERT         "TYPE : "
-#define COMPARE_PARAMETER_ASSERT      "COMPARE : "
-#define EXPECTED_PARAMETER_ASSERT     "EXPECTED : "
-#define OBTAINED_PARAMETER_ASSERT     "OBTAINED : "
-#define VALID_PARAMETER_ASSERT        "VALID : "
+#define LET_FAILURE_BALISE                "failure"
+#define LET_FAILURE_TYPE_PARAMETER        "type"
+#define LET_FAILURE_MESSAGE_PARAMETER     "message"
+#define LET_FAILURE_DATA_NEWLINE          "\n\t\t\t\t"
+#define LET_FILE_PARAMETER_ASSERT         LET_FAILURE_DATA_NEWLINE "FILE : "
+#define LET_LINE_PARAMETER_ASSERT         LET_FAILURE_DATA_NEWLINE "LINE : "
+#define LET_COMPARE_PARAMETER_ASSERT      LET_FAILURE_DATA_NEWLINE "COMPARE : "
+#define LET_EXPECTED_PARAMETER_ASSERT     LET_FAILURE_DATA_NEWLINE "EXPECTED : "
+#define LET_OBTAINED_PARAMETER_ASSERT     LET_FAILURE_DATA_NEWLINE "OBTAINED : "
 // +---------------------------------------------+
 // | junit_format types                          |
 // +---------------------------------------------+
@@ -67,86 +66,78 @@ extern void LET_Framework_printer (const char * data);
 // +---------------------------------------------+
 void LET_init_printer(void){
   LET_Framework_printer("\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-  open_balise(TESTSUITE_BALISE, 1, 0, 0);
-  LET_Framework_printer("s");
-  close_balise(0);
+  LET_xml_open_balise(LET_TESTSUITES_BALISE, 1, 0, 0);
+  LET_xml_close_balise(0);
 }
 
 void LET_end_printer(void){
-  open_balise(TESTSUITE_BALISE, 1, 0, 1);
-  LET_Framework_printer("s");
-  close_balise(0);
+  LET_xml_open_balise(LET_TESTSUITES_BALISE, 1, 0, 1);
+  LET_xml_close_balise(0);
   LET_Framework_printer("\n");
 }
 
-void service_init_printer(char* name, uint8_t test_number){
+void LET_service_init_printer(char* name, uint8_t test_number){
   char number[5] = {'\0'};
-  uint_to_decimal_string(number, test_number);
-  open_balise(TESTSUITE_BALISE, 1, 1, 0);
-  add_parameter(TESTSUITE_NAME_PARAMETER, name);
-  add_parameter(TESTSUITE_TESTNB_PARAMETER, number);
-  close_balise(0);
+  LET_uint_to_decimal_string(number, test_number);
+  LET_xml_open_balise(LET_TESTSUITE_BALISE, 1, 1, 0);
+  LET_xml_add_parameter(LET_TESTSUITE_NAME_PARAMETER, name);
+  LET_xml_add_parameter(LET_TESTSUITE_TESTNB_PARAMETER, number);
+  LET_xml_close_balise(0);
 }
 
-void service_end_printer(void){
-  open_balise(TESTSUITE_BALISE, 1, 1, 1);
-  close_balise(0);
+void LET_service_end_printer(void){
+  LET_xml_open_balise(LET_TESTSUITE_BALISE, 1, 1, 1);
+  LET_xml_close_balise(0);
 }
 
-void test_init_printer(char* name, char *service_name){
-  open_balise(TESTCASE_BALISE, 1, 2, 0);
-  add_parameter(TESTCASE_NAME_PARAMETER, name);
-  add_parameter(TESTCASE_CLASSNAME_PARAMETER, service_name);
-  close_balise(0);
+void LET_test_init_printer(char* name, char *service_name){
+  LET_xml_open_balise(LET_TESTCASE_BALISE, 1, 2, 0);
+  LET_xml_add_parameter(LET_TESTCASE_NAME_PARAMETER, name);
+  LET_xml_add_parameter(LET_TESTCASE_CLASSNAME_PARAMETER, service_name);
+  LET_xml_close_balise(0);
 }
 
-void test_end_printer(ASSERT_RESULT result){
-  open_balise(TESTCASE_BALISE, 1, 2, 1);
-  close_balise(0);
+void LET_test_end_printer(void){
+  LET_xml_open_balise(LET_TESTCASE_BALISE, 1, 2, 1);
+  LET_xml_close_balise(0);
 }
 
-void assert_printer(char *name,
-                  ASSERT_TYPE type,
-                  ASSERT_COMPARE compare,
+void LET_assert_printer(char *name,
+                  LET_ASSERT_TYPE type,
+                  LET_ASSERT_COMPARE compare,
                   char *expected,
-                  char *obtained,
-                  ASSERT_RESULT result
- #ifdef FILE_AND_LINE
+                  char *obtained
+ #ifdef LET_FILE_AND_LINE
                   ,char *file
-                  ,char *line
+                  ,uint32_t line
  #endif
 ){
-  open_balise(FAILURE_BALISE, 1, 3, 0);
-  add_parameter(FAILURE_MESSAGE_PARAMETER, name);
-  add_parameter(FAILURE_TYPE_PARAMETER, ASSERT_TYPE_STRING[type]);
-  close_balise(0);
-  #ifdef FILE_AND_LINE
-    LET_Framework_printer(FAILURE_DATA_NEWLINE);
-    LET_Framework_printer(FILE_PARAMETER_ASSERT);
-    LET_Framework_printer(file);
+ #ifdef LET_FILE_AND_LINE
+  char str_line[25] = {'\0'};
+  LET_uint_to_decimal_string(str_line, line);
+ #endif
+  LET_xml_open_balise(LET_FAILURE_BALISE, 1, 3, 0);
+  LET_xml_add_parameter(LET_FAILURE_MESSAGE_PARAMETER, name);
+  LET_xml_add_parameter(LET_FAILURE_TYPE_PARAMETER, LET_ASSERT_TYPE_STRING[type]);
+  LET_xml_close_balise(0);
+ #ifdef LET_FILE_AND_LINE
+  LET_Framework_printer(LET_FILE_PARAMETER_ASSERT);
+  LET_Framework_printer(file);
 
-    LET_Framework_printer(FAILURE_DATA_NEWLINE);
-    LET_Framework_printer(LINE_PARAMETER_ASSERT);
-    LET_Framework_printer(line);
+  LET_Framework_printer(LET_LINE_PARAMETER_ASSERT);
+  LET_Framework_printer(str_line);
 
-  #endif
+ #endif
 
-  LET_Framework_printer(FAILURE_DATA_NEWLINE);
-  LET_Framework_printer(COMPARE_PARAMETER_ASSERT);
-  LET_Framework_printer(ASSERT_COMPARE_STRING[compare]);
+  LET_Framework_printer(LET_COMPARE_PARAMETER_ASSERT);
+  LET_Framework_printer(LET_ASSERT_COMPARE_STRING[compare]);
 
-  LET_Framework_printer(FAILURE_DATA_NEWLINE);
-  LET_Framework_printer(EXPECTED_PARAMETER_ASSERT);
+  LET_Framework_printer(LET_EXPECTED_PARAMETER_ASSERT);
   LET_Framework_printer(expected);
 
-  LET_Framework_printer(FAILURE_DATA_NEWLINE);
-  LET_Framework_printer(OBTAINED_PARAMETER_ASSERT);
+  LET_Framework_printer(LET_OBTAINED_PARAMETER_ASSERT);
   LET_Framework_printer(obtained);
 
-  LET_Framework_printer(FAILURE_DATA_NEWLINE);
-  LET_Framework_printer(VALID_PARAMETER_ASSERT);
-  LET_Framework_printer(ASSERT_RESULT_STRING[result]);
-
-  open_balise(FAILURE_BALISE, 1, 3, 1);
-  close_balise(0);
+  LET_xml_open_balise(LET_FAILURE_BALISE, 1, 3, 1);
+  LET_xml_close_balise(0);
 }

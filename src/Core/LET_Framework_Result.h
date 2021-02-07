@@ -16,16 +16,16 @@
 // | LET_Framework_Result Types                |
 // +-------------------------------------------+
 
-#define FOREACH_TYPE(TYPE) \
-        TYPE(UINT) \
-        TYPE(INT) \
-        TYPE(FLOAT) \
-        TYPE(DOUBLE) \
-        TYPE(STR)
+#define LET_FOREACH_TYPE(LET_TYPE) \
+        LET_TYPE(UINT) \
+        LET_TYPE(INT) \
+        LET_TYPE(FLOAT) \
+        LET_TYPE(DOUBLE) \
+        LET_TYPE(STR)
 
 typedef enum {
-    FOREACH_TYPE(GENERATE_ENUM)
-}ASSERT_TYPE;
+    LET_FOREACH_TYPE(LET_GENERATE_ENUM)
+}LET_ASSERT_TYPE;
 
 
 // +-------------------------------------------+
@@ -48,23 +48,31 @@ typedef enum {
 // +-------------------------------------------+
 void LET_init_printer(void);
 void LET_end_printer(void);
-void service_init_printer(char *name, uint8_t test_number);
-void service_end_printer(void);
-#ifdef JUNIT
-void test_init_printer(char *name, char *service_name);
-#else
-void test_init_printer(char *name);
-#endif
-void test_end_printer(ASSERT_RESULT result);
-void assert_printer(char *name,
-                  ASSERT_TYPE type,
-                  ASSERT_COMPARE compare,
+void LET_service_init_printer(char *name, uint8_t test_number);
+void LET_service_end_printer(void);
+void LET_test_init_printer(char *name
+ #ifdef LET_JUNIT
+                            ,char *service_name
+ #endif
+);
+void LET_test_end_printer(
+ #ifndef LET_JUNIT
+                        LET_ASSERT_RESULT result
+ #else
+                        void
+ #endif
+    );
+void LET_assert_printer(char *name,
+                  LET_ASSERT_TYPE type,
+                  LET_ASSERT_COMPARE compare,
                   char *expected,
-                  char *obtained,
-                  ASSERT_RESULT result
- #ifdef FILE_AND_LINE
+                  char *obtained
+ #ifndef LET_JUNIT
+                  ,LET_ASSERT_RESULT result
+ #endif
+ #ifdef LET_FILE_AND_LINE
                   ,char *file
-                  ,char *line
+                  ,uint32_t line
  #endif
 );
 

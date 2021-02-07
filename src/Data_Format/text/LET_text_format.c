@@ -53,9 +53,9 @@ extern void LET_Framework_printer(const char * data);
 void LET_init_printer(void){;}
 void LET_end_printer(void){;}
 
-void service_init_printer(char* name, uint8_t test_number){
+void LET_service_init_printer(char* name, uint8_t test_number){
   char number[5] = {'\n'};
-  uint_to_decimal_string(number, test_number);
+  LET_uint_to_decimal_string(number, test_number);
   LET_Framework_printer("Service Begin \"");
   LET_Framework_printer(name);
   LET_Framework_printer("\" with ");
@@ -63,50 +63,54 @@ void service_init_printer(char* name, uint8_t test_number){
   LET_Framework_printer((test_number>1)?" tests :":" test :");
 }
 
-void service_end_printer(void){
+void LET_service_end_printer(void){
   LET_Framework_printer("\nService End\n");
 }
 
-void test_init_printer(char* name){
+void LET_test_init_printer(char* name){
   LET_Framework_printer("\n| Test Begin \"");
   LET_Framework_printer(name);
   LET_Framework_printer("\"");
 }
 
-void test_end_printer(ASSERT_RESULT result){
+void LET_test_end_printer(LET_ASSERT_RESULT result){
   LET_Framework_printer("\n| Test End : ");
-  LET_Framework_printer((OK==result)?"PASSED":"FAILED");
+  LET_Framework_printer((LET_OK==result)?"PASSED":"FAILED");
 }
 
-void assert_printer(char *name,
-                  ASSERT_TYPE type,
-                  ASSERT_COMPARE compare,
+void LET_assert_printer(char *name,
+                  LET_ASSERT_TYPE type,
+                  LET_ASSERT_COMPARE compare,
                   char *expected,
                   char *obtained,
-                  ASSERT_RESULT result
- #ifdef FILE_AND_LINE
+                  LET_ASSERT_RESULT result
+ #ifdef LET_FILE_AND_LINE
                   ,char *file
-                  ,char *line
+                  ,uint32_t line
  #endif
 ){
+ #ifdef LET_FILE_AND_LINE
+  char str_line[25];
+  LET_uint_to_decimal_string(str_line, line);
+ #endif
   LET_Framework_printer("\n| | Assertion ");
- #ifdef FILE_AND_LINE
+ #ifdef LET_FILE_AND_LINE
   LET_Framework_printer("[");
   LET_Framework_printer(file);
   LET_Framework_printer("{l.");
-  LET_Framework_printer(line);
+  LET_Framework_printer(str_line);
   LET_Framework_printer("}]");
  #endif
   LET_Framework_printer(" \"");
   LET_Framework_printer(name);
   LET_Framework_printer("\" : Expected ");
-  LET_Framework_printer(ASSERT_TYPE_STRING[type]);
+  LET_Framework_printer(LET_ASSERT_TYPE_STRING[type]);
   LET_Framework_printer(" ");
-  LET_Framework_printer(ASSERT_COMPARE_STRING[compare]);
+  LET_Framework_printer(LET_ASSERT_COMPARE_STRING[compare]);
   LET_Framework_printer(" [");
   LET_Framework_printer(expected);
   LET_Framework_printer("] Obtained [");
   LET_Framework_printer(obtained);
   LET_Framework_printer("] --> ");
-  LET_Framework_printer(ASSERT_RESULT_STRING[result]);
+  LET_Framework_printer(LET_ASSERT_RESULT_STRING[result]);
 }

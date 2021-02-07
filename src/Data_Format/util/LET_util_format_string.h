@@ -24,25 +24,25 @@
 // +-------------------------------------------+
 // | LET_Framework_Result Macros               |
 // +-------------------------------------------+
-#define GENERATE_STRING(STRING) #STRING,
+#define LET_GENERATE_STRING(LET_STRING) #LET_STRING,
 
 
 
 // +-------------------------------------------+
 // | LET_Framework_Result Variables            |
 // +-------------------------------------------+
-extern const char *ASSERT_COMPARE_STRING[];
-extern const char *ASSERT_TYPE_STRING[];
-extern const char *ASSERT_RESULT_STRING[];
+extern const char *LET_ASSERT_COMPARE_STRING[];
+extern const char *LET_ASSERT_TYPE_STRING[];
+extern const char *LET_ASSERT_RESULT_STRING[];
 
 // +-------------------------------------------+
 // | LET_Framework_Result Functions Definition |
 // +-------------------------------------------+
-void uint_to_decimal_string(char str[], uint64_t num);
-void uint_to_base_string(char str[], uint64_t num, ASSERT_REPRESENT format, ASSERT_PRECISION bytes);
-void int_to_string(char str[], int64_t num);
-uint8_t compare_str(char *a, char *b);
-uint16_t str_size(char *a);
-void str_convert(char dest[], char *src, ASSERT_REPRESENT format, ASSERT_PRECISION whitespace);
+void LET_uint_to_decimal_string(char str[], uint64_t num);
+void LET_uint_to_base_string(char str[], uint64_t num, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION bytes);
+void LET_int_to_string(char str[], int64_t num);
+uint8_t LET_compare_str(char *a, char *b);
+uint32_t LET_str_size(char *a);
+void LET_str_convert(char dest[], char *src, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace);
 
 #endif //D_UTIL_FORMAT_H_
