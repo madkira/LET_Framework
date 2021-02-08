@@ -78,7 +78,8 @@ uint64_t LET_str_to_uint64(char*a, LET_ASSERT_PRECISION whitespace){
 // | LET_Framework_Result public functions declaration  |
 // +----------------------------------------------------+
 void LET_uint_to_decimal_string(char str[], uint64_t num){
-  uint64_t i, rem, len = 0, n = num;
+  uint8_t i, rem, len = 0;
+  uint64_t  n = num;
 
   do{
     len++;
@@ -96,9 +97,9 @@ void LET_uint_to_decimal_string(char str[], uint64_t num){
 
 uint8_t LET_convert_uint_to_base(char str[], uint64_t num, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION bytes){
   uint8_t i;
-  uint8_t mask_format = (LET_BINARY == format)? LET_MASK_BINARY : (LET_OCTAL == format)? LET_MASK_OCTAL : LET_MASK_HEXADECIMAL;
-  uint8_t bit_number = (LET_BINARY == format)? LET_BIT_NUMBER_BINARY : (LET_OCTAL == format)? LET_BIT_NUMBER_OCTAL : LET_BIT_NUMBER_HEXADECIMAL;
-  uint8_t character_number = (((LET_OCTAL == format)?2:0) +(bytes*8))/bit_number;
+  uint8_t mask_format = (uint8_t) (LET_BINARY == format)? LET_MASK_BINARY : (LET_OCTAL == format)? LET_MASK_OCTAL : LET_MASK_HEXADECIMAL;
+  uint8_t bit_number = (uint8_t) (LET_BINARY == format)? LET_BIT_NUMBER_BINARY : (LET_OCTAL == format)? LET_BIT_NUMBER_OCTAL : LET_BIT_NUMBER_HEXADECIMAL;
+  uint8_t character_number = (uint8_t) (((LET_OCTAL == format)?2:0) +(bytes*8))/bit_number;
   for(i=0; i < character_number; i++){
     str[i] = LET_CHAR_HEXADECIMAL[(num>>((character_number-i-1)*bit_number))&mask_format];
   }
@@ -144,7 +145,7 @@ void LET_str_convert(char dest[], char *src, LET_ASSERT_REPRESENT format, LET_AS
   uint16_t i = 0;
   uint16_t position = 0;
   uint64_t buffer = 0;
-  uint16_t size = LET_str_size(src);
+  uint16_t size = (uint16_t) LET_str_size(src);
   for (; i<size/whitespace; i++){
     buffer = LET_str_to_uint64(src+(i*whitespace), whitespace);
     position +=  LET_convert_uint_to_base(dest+position, buffer, format, whitespace);

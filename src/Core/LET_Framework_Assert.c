@@ -277,8 +277,8 @@ LET_ASSERT_RESULT LET_ASSERT_double(LET_ASSERT_COMPARE assertion,
 
 
 LET_ASSERT_RESULT LET_ASSERT_str(LET_ASSERT_COMPARE assertion,
-                        uint8_t* obtained,
-                        uint8_t* expected,
+                        char* obtained,
+                        char* expected,
                         LET_ASSERT_PRECISION whitespace,
                         LET_ASSERT_REPRESENT format,
                         char* name,
@@ -312,24 +312,25 @@ LET_ASSERT_RESULT LET_ASSERT_str(LET_ASSERT_COMPARE assertion,
     }
 
     if(LET_HEXADECIMAL == format || LET_BINARY == format){
-      uint16_t expected_size = LET_str_size(expected);
-      uint16_t obtained_size = LET_str_size(obtained);
-      expected_size = (expected_size/whitespace) + expected_size*((LET_BINARY==format)?LET_BYTE_DIGIT : LET_HEXA_DIGIT);
-      obtained_size = (obtained_size/whitespace) + obtained_size*((LET_BINARY==format)?LET_BYTE_DIGIT : LET_HEXA_DIGIT);
+      uint16_t expected_size = (uint16_t)LET_str_size(expected);
+      uint16_t obtained_size = (uint16_t)LET_str_size(obtained);
+      expected_size = (uint16_t)(expected_size/whitespace) + expected_size*((LET_BINARY==format)?LET_BYTE_DIGIT : LET_HEXA_DIGIT);
+      obtained_size = (uint16_t)(obtained_size/whitespace) + obtained_size*((LET_BINARY==format)?LET_BYTE_DIGIT : LET_HEXA_DIGIT);
+      if(expected_size < 2048 && obtained_size < 2048){
+        char convert_expected[2048];
+        char convert_obtained[2048];
+        LET_str_convert(convert_expected, expected, format, whitespace);
+        LET_str_convert(convert_obtained, obtained, format, whitespace);
 
-      char convert_expected[expected_size];
-      char convert_obtained[obtained_size];
-      LET_str_convert(convert_expected, expected, format, whitespace);
-      LET_str_convert(convert_obtained, obtained, format, whitespace);
-
-      LET_assert_printer(name, LET_STR, assertion, convert_expected, convert_obtained
-     #ifndef LET_JUNIT
-      , result
-     #endif
-    #ifdef LET_FILE_AND_LINE
-                    ,file, line
-    #endif
-      );
+        LET_assert_printer(name, LET_STR, assertion, convert_expected, convert_obtained
+       #ifndef LET_JUNIT
+                          ,result
+       #endif
+       #ifdef LET_FILE_AND_LINE
+                          ,file, line
+      #endif
+        );
+      }
     }else{
 
       LET_assert_printer(name, LET_STR, assertion, expected, obtained
