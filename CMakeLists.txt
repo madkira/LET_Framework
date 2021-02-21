@@ -57,4 +57,6 @@ if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND 
     add_subdirectory(exemple)
     add_subdirectory(test/Data_Format/util)
     add_subdirectory(test/Data_Format/junit)
+    add_subdirectory(test/Core/Core/junit)
+    add_subdirectory(test/Core/Core/generic)
 endif()
