@@ -100,6 +100,7 @@ void stub_call_a(void){
 }
 
 void stub_call_b(LET_Test * itself){
+    itself->result = itself->result;
     count_call_b++;
 }
 
@@ -118,6 +119,7 @@ void test_LET_service_init(void){
         printf("service init function  KO\n");
     }
 }
+
 
 void test_LET_test_register(void){
     Reset_env();

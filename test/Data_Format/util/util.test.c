@@ -7,7 +7,7 @@
 #define TEST_MAX_BUFFER_SIZE 1024
 
 uint32_t buffer_position;
-uint8_t buffer[TEST_MAX_BUFFER_SIZE];
+char buffer[TEST_MAX_BUFFER_SIZE];
 char lorem_ipsum[] = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.";
 char *lorem_ipsum2 = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged!";
 
@@ -340,40 +340,6 @@ void test_LET_compare_str(void){
     }
 }
 
-void test_LET_str_size(void){
-    Reset_env();
-    if(LET_str_size("") == strlen("")){
-        printf("OK\n");
-    }else{
-        printf("LET_str_size(\"\") KO\n");
-    }
-
-    Reset_env();
-    if(LET_str_size("a") == strlen("a")){
-        printf("OK\n");
-    }else{
-        printf("LET_str_size(\"a\") KO\n");
-    }
-
-    Reset_env();
-    if(LET_str_size("a1") == strlen("a1")){
-        printf("OK\n");
-    }else{
-        printf("LET_str_size(\"a1\") KO\n");
-    }
-
-    Reset_env();
-    if(LET_str_size(lorem_ipsum) == strlen(lorem_ipsum)){
-        printf("OK\n");
-    }else{
-        printf("LET_str_size(lorem_ipsum) KO\n");
-    }
-}
-
-void test_LET_str_convert(void){
-    Reset_env();
-}
-
 void test_LET_str_to_uint64(void){
     uint64_t result = 0;
     char data[] = {(char)0xDEu, (char)0xADu, (char)0xBEu, (char)0xEFu, (char)0xDEu, (char)0xADu, (char)0xBEu, (char)0xEFu};
@@ -440,6 +406,66 @@ void test_LET_convert_uint_to_base(void){
 
 
 
+void test_LET_array_convert(void){
+    Reset_env();
+    LET_array_convert(buffer, "abcdefghijklmnopqrstuvwxyz \0 1234567890", 39, LET_HEXADECIMAL, LET_BYTE);
+    if(!strcmp(buffer, "61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F 70 71 72 73 74 75 76 77 78 79 7A 20 00 20 31 32 33 34 35 36 37 38 39 30\0")){
+        printf("OK\n");
+    }else{
+        printf("LET_array_convert(buffer, \"abcdefghijklmnopqrstuvwxyz \\0 1234567890\", 38, LET_HEXADECIMAL, LET_BYTE)  %s KO\n", buffer);
+    }
+    Reset_env();
+    LET_array_convert(buffer, "abcdefghijklmnopqrstuvwxyz \0 1234567890", 39, LET_HEXADECIMAL, LET_WORD);
+    if(!strcmp(buffer, "6162 6364 6566 6768 696A 6B6C 6D6E 6F70 7172 7374 7576 7778 797A 2000 2031 3233 3435 3637 3839 30\0")){
+        printf("OK\n");
+    }else{
+        printf("LET_array_convert(buffer, \"abcdefghijklmnopqrstuvwxyz \\0 1234567890\", 38, LET_HEXADECIMAL, LET_WORD)  %s KO\n", buffer);
+    }
+    Reset_env();
+    LET_array_convert(buffer, "abcdefghijklmnopqrstuvwxyz \0 1234567890", 39, LET_HEXADECIMAL, LET_DWORD);
+    if(!strcmp(buffer, "61626364 65666768 696A6B6C 6D6E6F70 71727374 75767778 797A2000 20313233 34353637 383930\0")){
+        printf("OK\n");
+    }else{
+        printf("LET_array_convert(buffer, \"abcdefghijklmnopqrstuvwxyz \\0 1234567890\", 38, LET_HEXADECIMAL, LET_DWORD)  %s KO\n", buffer);
+    }
+    Reset_env();
+    LET_array_convert(buffer, "abcdefghijklmnopqrstuvwxyz \0 1234567890", 39, LET_HEXADECIMAL, LET_QWORD);
+    if(!strcmp(buffer, "6162636465666768 696A6B6C6D6E6F70 7172737475767778 797A200020313233 34353637383930\0")){
+        printf("OK\n");
+    }else{
+        printf("LET_array_convert(buffer, \"abcdefghijklmnopqrstuvwxyz \\0 1234567890\", 38, LET_HEXADECIMAL, LET_QWORD)  %s KO\n", buffer);
+    }
+    Reset_env();
+    LET_array_convert(buffer, "abcdefghijklmnopqrstuvwxyz \0 1234567890", 39, LET_BINARY, LET_BYTE);
+    if(!strcmp(buffer, "01100001 01100010 01100011 01100100 01100101 01100110 01100111 01101000 01101001 01101010 01101011 01101100 01101101 01101110 01101111 01110000 01110001 01110010 01110011 01110100 01110101 01110110 01110111 01111000 01111001 01111010 00100000 00000000 00100000 00110001 00110010 00110011 00110100 00110101 00110110 00110111 00111000 00111001 00110000\0")){
+        printf("OK\n");
+    }else{
+        printf("LET_array_convert(buffer, \"abcdefghijklmnopqrstuvwxyz \\0 1234567890\", 38, LET_BINARY, LET_BYTE)  %s KO\n", buffer);
+    }
+    Reset_env();
+    LET_array_convert(buffer, "abcdefghijklmnopqrstuvwxyz \0 1234567890", 39, LET_BINARY, LET_WORD);
+    if(!strcmp(buffer, "0110000101100010 0110001101100100 0110010101100110 0110011101101000 0110100101101010 0110101101101100 0110110101101110 0110111101110000 0111000101110010 0111001101110100 0111010101110110 0111011101111000 0111100101111010 0010000000000000 0010000000110001 0011001000110011 0011010000110101 0011011000110111 0011100000111001 00110000\0")){
+        printf("OK\n");
+    }else{
+        printf("LET_array_convert(buffer, \"abcdefghijklmnopqrstuvwxyz \\0 1234567890\", 38, LET_BINARY, LET_WORD)  %s KO\n", buffer);
+    }
+    Reset_env();
+    LET_array_convert(buffer, "abcdefghijklmnopqrstuvwxyz \0 1234567890", 39, LET_BINARY, LET_DWORD);
+    if(!strcmp(buffer, "01100001011000100110001101100100 01100101011001100110011101101000 01101001011010100110101101101100 01101101011011100110111101110000 01110001011100100111001101110100 01110101011101100111011101111000 01111001011110100010000000000000 00100000001100010011001000110011 00110100001101010011011000110111 001110000011100100110000\0")){
+        printf("OK\n");
+    }else{
+        printf("LET_array_convert(buffer, \"abcdefghijklmnopqrstuvwxyz \\0 1234567890\", 38, LET_BINARY, LET_DWORD)  %s KO\n", buffer);
+    }
+    Reset_env();
+    LET_array_convert(buffer, "abcdefghijklmnopqrstuvwxyz \0 1234567890", 39, LET_BINARY, LET_QWORD);
+    if(!strcmp(buffer, "0110000101100010011000110110010001100101011001100110011101101000 0110100101101010011010110110110001101101011011100110111101110000 0111000101110010011100110111010001110101011101100111011101111000 0111100101111010001000000000000000100000001100010011001000110011 00110100001101010011011000110111001110000011100100110000\0")){
+        printf("OK\n");
+    }else{
+        printf("LET_array_convert(buffer, \"abcdefghijklmnopqrstuvwxyz \\0 1234567890\", 38, LET_BINARY, LET_QWORD)  %s KO\n", buffer);
+    }
+
+}
+
 
 int main (){
     test_LET_xml_open_balise();
@@ -450,11 +476,10 @@ int main (){
     test_LET_uint_to_base_string();
     test_LET_int_to_string();
     test_LET_compare_str();
-    test_LET_str_size();
-    test_LET_str_convert();
     test_LET_str_to_uint64();
     test_LET_convert_uint_to_base();
 
+    test_LET_array_convert();
 
     return 0;
 }

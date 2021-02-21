@@ -116,15 +116,14 @@ void str_assertion(LET_Test *itself){
     LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum2, lorem_ipsum3);
     LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum4, lorem_ipsum);
     LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum2, lorem_ipsum4);
-    LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, LET_BYTE, LET_HEXADECIMAL);
-    LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, LET_WORD, LET_HEXADECIMAL);
-    LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, LET_DWORD, LET_HEXADECIMAL);
-    LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, LET_QWORD, LET_HEXADECIMAL);
+    LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum3, lorem_ipsum4);
+}
 
-    LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, LET_BYTE, LET_BINARY);
-    LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, LET_WORD, LET_BINARY);
-    LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, LET_DWORD, LET_BINARY);
-    LET_ASSERT_STR(LET_NOT_EQUAL, lorem_ipsum3, lorem_ipsum4, LET_QWORD, LET_BINARY);
+void array_assertion(LET_Test *itself){
+    char *data1 = "azertyuiop\0\0sxfgyhnjkl";
+    char *data2 = "azertyuiop\n\0sxfgyhnjkl";
+    LET_ASSERT_ARRAY(LET_EQUAL, data1, data1, 23);
+    LET_ASSERT_ARRAY(LET_NOT_EQUAL, data1, data2, 23);
 }
 
 void rename_assertion (LET_Test *itself){
@@ -155,6 +154,7 @@ int main (){
     LET_test_register(&format_test, "uint_conversion_assertion", uint_conversion_assertion);
     LET_test_register(&format_test, "rename_assertion", rename_assertion);
     LET_test_register(&format_test, "str_assertion", str_assertion);
+    LET_test_register(&format_test, "array_assertion", array_assertion);
     LET_service_runner(&format_test);
     LET_end();
     return 0;

@@ -12,7 +12,9 @@ project(LET_FRAMEWORK
 ###############################
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(GENERATED_COVERAGE_DIR "${CMAKE_BINARY_DIR}/src/CMakeFiles/${CMAKE_PROJECT_NAME}.dir/Core")
-    set(CMAKE_C_FLAGS "-std=c99 -pedantic -O0 -g -Wall -Werror -Wno-pointer-sign -ffunction-sections -fdata-sections")
+    set(CMAKE_C_FLAGS "-std=c99 -pedantic -O0 -g -Wall -Wextra -Werror")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections -fstack-usage -fno-common")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-pointer-sign -Wshadow -Wdouble-promotion -Wformat=2 -Wformat-truncation -Wundef -Wconversion")
 endif()
 
 if(FILE_AND_LINE)
@@ -54,6 +56,7 @@ if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND 
     )
     add_custom_target(gcov
         COMMAND gcov ${CMAKE_CURRENT_LIST_DIR}/src/*.c -o ${GENERATED_COVERAGE_DIR}/*.c.gcno -o ${GENERATED_COVERAGE_DIR}/*.c.gcda)
+
     add_subdirectory(exemple)
     add_subdirectory(test/Data_Format/util)
     add_subdirectory(test/Data_Format/junit)

@@ -102,6 +102,7 @@ void stub_call_a(void){
 }
 
 void stub_call_b(LET_Test * itself){
+    itself->result = itself->result;
     count_call_b++;
 }
 

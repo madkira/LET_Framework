@@ -87,9 +87,9 @@ void LET_uint_to_decimal_string(char str[], uint64_t num){
   }while (n != 0);
 
   for (i = 0; i < len; i++){
-    rem = num % 10;
+    rem = (uint8_t)(num % 10);
     num = num / 10;
-    str[len - (i + 1)] = rem + '0';
+    *((uint8_t*)&str[len - (i + 1)]) = rem + '0';
   }
 
   str[len] = '\0';
@@ -125,8 +125,7 @@ void LET_int_to_string(char str[], int64_t num){
 }
 
 
-
-uint8_t LET_compare_str(char *a, char *b){
+int8_t LET_compare_str(char *a, char *b){
   while( ( *a != '\0' && *b != '\0' ) && *a == *b ){
     a++;
     b++;
@@ -134,26 +133,19 @@ uint8_t LET_compare_str(char *a, char *b){
   return *a - *b;
 }
 
-uint32_t LET_str_size(char *a){
-  uint32_t size = 0;
-  for(; a[size] != '\0'; size++);
-  return size;
-}
 
-
-void LET_str_convert(char dest[], char *src, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace){
-  uint16_t i = 0;
+void LET_array_convert(char dest[], char *src, uint32_t size, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace){
+  uint32_t i = 0;
   uint16_t position = 0;
   uint64_t buffer = 0;
-  uint16_t size = (uint16_t) LET_str_size(src);
   for (; i<size/whitespace; i++){
     buffer = LET_str_to_uint64(src+(i*whitespace), whitespace);
     position +=  LET_convert_uint_to_base(dest+position, buffer, format, whitespace);
     dest[position++]=' ';
   }
-  for(uint16_t j = 0; j < size%whitespace; j++){
+  for(uint8_t j = 0; j < size%whitespace; j++){
     buffer = LET_str_to_uint64(src+j+(i*whitespace), LET_BYTE);
     position += LET_convert_uint_to_base(dest+position, buffer, format, LET_BYTE);
   }
-  dest[position]='\0';
+  dest[position-((size%whitespace)?0:1)]='\0';
 }

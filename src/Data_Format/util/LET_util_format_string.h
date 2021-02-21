@@ -41,8 +41,8 @@ extern const char *LET_ASSERT_RESULT_STRING[];
 void LET_uint_to_decimal_string(char str[], uint64_t num);
 void LET_uint_to_base_string(char str[], uint64_t num, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION bytes);
 void LET_int_to_string(char str[], int64_t num);
-uint8_t LET_compare_str(char *a, char *b);
+int8_t LET_compare_str(char *a, char *b);
 uint32_t LET_str_size(char *a);
-void LET_str_convert(char dest[], char *src, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace);
+void LET_array_convert(char dest[], char *src, uint32_t size, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace);
 
 #endif //D_UTIL_FORMAT_H_

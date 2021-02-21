@@ -56,10 +56,10 @@ typedef enum {
 
 
 typedef enum{
-  LET_BYTE    =1
-  ,LET_WORD   =2
-  ,LET_DWORD  =4
-  ,LET_QWORD  =8
+  LET_BYTE    =1u
+  ,LET_WORD   =2u
+  ,LET_DWORD  =4u
+  ,LET_QWORD  =8u
 }LET_ASSERT_PRECISION;
 
 typedef enum{
@@ -133,56 +133,35 @@ typedef struct LET_Framework_Service {
 
 
 #ifdef LET_STOP_TEST_ON_FAILED
-#define LET_ASSERT_FLOAT_CALL(...) if(LET_KO==LET_ASSERT_float(__VA_ARGS__))return
-#else
-#define LET_ASSERT_FLOAT_CALL(...) LET_ASSERT_float(__VA_ARGS__)
-#endif
-#ifdef LET_FILE_AND_LINE
-#define LET_ASSERT_FLOAT7(...) LET_ASSERT_FLOAT_CALL(__VA_ARGS__, itself, __FILE__, __LINE__)
-#else
-#define LET_ASSERT_FLOAT7(...) LET_ASSERT_FLOAT_CALL(__VA_ARGS__, itself)
-#endif
-#define LET_ASSERT_FLOAT6(a, b, ...) LET_EXPAND(LET_ASSERT_FLOAT7(a, b, __VA_ARGS__, #b))
-#define LET_ASSERT_FLOAT5(...) LET_EXPAND(LET_ASSERT_FLOAT6(__VA_ARGS__, LET_DECIMAL))
-#define LET_ASSERT_FLOAT4(...) LET_EXPAND(LET_ASSERT_FLOAT5(__VA_ARGS__, 6))
-#define LET_ASSERT_FLOAT3(...) LET_EXPAND(LET_ASSERT_FLOAT4(__VA_ARGS__, 0.1))
-#define LET_ASSERT_FLOAT_FUNC(_1, _2, _3, _4, _5, _6, _7, NAME, ...) NAME
-#define LET_ASSERT_FLOAT(...) LET_EXPAND(LET_ASSERT_FLOAT_FUNC(__VA_ARGS__, LET_ASSERT_FLOAT7, LET_ASSERT_FLOAT6, LET_ASSERT_FLOAT5, LET_ASSERT_FLOAT4, LET_ASSERT_FLOAT3, ...)(__VA_ARGS__))
-
-
-#ifdef LET_STOP_TEST_ON_FAILED
-#define LET_ASSERT_DOUBLE_CALL(...) if(LET_KO==LET_ASSERT_double(__VA_ARGS__))return
-#else
-#define LET_ASSERT_DOUBLE_CALL(...) LET_ASSERT_double(__VA_ARGS__)
-#endif
-#ifdef LET_FILE_AND_LINE
-#define LET_ASSERT_DOUBLE7(...) LET_ASSERT_DOUBLE_CALL(__VA_ARGS__, itself, __FILE__, __LINE__)
-#else
-#define LET_ASSERT_DOUBLE7(...) LET_ASSERT_DOUBLE_CALL(__VA_ARGS__, itself)
-#endif
-#define LET_ASSERT_DOUBLE6(a, b, ...) LET_EXPAND(LET_ASSERT_DOUBLE7(a, b, __VA_ARGS__, #b))
-#define LET_ASSERT_DOUBLE5(...) LET_EXPAND(LET_ASSERT_DOUBLE6(__VA_ARGS__, LET_DECIMAL))
-#define LET_ASSERT_DOUBLE4(...) LET_EXPAND(LET_ASSERT_DOUBLE5(__VA_ARGS__, 10))
-#define LET_ASSERT_DOUBLE3(...) LET_EXPAND(LET_ASSERT_DOUBLE4(__VA_ARGS__, 0.1))
-#define LET_ASSERT_DOUBLE_FUNC(_1, _2, _3, _4, _5, _6, _7, NAME, ...) NAME
-#define LET_ASSERT_DOUBLE(...) LET_EXPAND(LET_ASSERT_DOUBLE_FUNC(__VA_ARGS__, LET_ASSERT_DOUBLE7, LET_ASSERT_DOUBLE6, LET_ASSERT_DOUBLE5, LET_ASSERT_DOUBLE4, LET_ASSERT_DOUBLE3, ...)(__VA_ARGS__))
-
-
-#ifdef LET_STOP_TEST_ON_FAILED
 #define LET_ASSERT_STR_CALL(...) if(LET_KO==LET_ASSERT_str(__VA_ARGS__))return
 #else
 #define LET_ASSERT_STR_CALL(...) LET_ASSERT_str(__VA_ARGS__)
 #endif
 #ifdef LET_FILE_AND_LINE
-#define LET_ASSERT_STR6(...) LET_ASSERT_STR_CALL(__VA_ARGS__, itself, __FILE__, __LINE__)
+#define LET_ASSERT_STR4(...) LET_ASSERT_STR_CALL(__VA_ARGS__, itself, __FILE__, __LINE__)
 #else
-#define LET_ASSERT_STR6(...) LET_ASSERT_STR_CALL(__VA_ARGS__, itself)
+#define LET_ASSERT_STR4(...) LET_ASSERT_STR_CALL(__VA_ARGS__, itself)
 #endif
-#define LET_ASSERT_STR5(a, b, ...) LET_EXPAND(LET_ASSERT_STR6(a, b, __VA_ARGS__, #b))
-#define LET_ASSERT_STR4(...) LET_EXPAND(LET_ASSERT_STR5(__VA_ARGS__, LET_STRING))
-#define LET_ASSERT_STR3(...) LET_EXPAND(LET_ASSERT_STR4(__VA_ARGS__, LET_DWORD))
-#define LET_ASSERT_STR_FUNC(_1, _2, _3, _4, _5, _6, NAME, ...) NAME
-#define LET_ASSERT_STR(...) LET_EXPAND(LET_ASSERT_STR_FUNC(__VA_ARGS__, LET_ASSERT_STR6, LET_ASSERT_STR5, LET_ASSERT_STR4, LET_ASSERT_STR3, ...)(__VA_ARGS__))
+#define LET_ASSERT_STR3(a, b, ...) LET_EXPAND(LET_ASSERT_STR4(a, b, __VA_ARGS__, #b))
+#define LET_ASSERT_STR_FUNC(_1, _2, _3, _4, NAME, ...) NAME
+#define LET_ASSERT_STR(...) LET_EXPAND(LET_ASSERT_STR_FUNC(__VA_ARGS__, LET_ASSERT_STR4, LET_ASSERT_STR3, ...)(__VA_ARGS__))
+
+
+#ifdef LET_STOP_TEST_ON_FAILED
+#define LET_ASSERT_ARRAY_CALL(...) if(LET_KO==LET_ASSERT_array(__VA_ARGS__))return
+#else
+#define LET_ASSERT_ARRAY_CALL(...) LET_ASSERT_array(__VA_ARGS__)
+#endif
+#ifdef LET_FILE_AND_LINE
+#define LET_ASSERT_ARRAY7(...) LET_ASSERT_ARRAY_CALL(__VA_ARGS__, itself, __FILE__, __LINE__)
+#else
+#define LET_ASSERT_ARRAY7(...) LET_ASSERT_ARRAY_CALL(__VA_ARGS__, itself)
+#endif
+#define LET_ASSERT_ARRAY6(a, b, ...) LET_EXPAND(LET_ASSERT_ARRAY7(a, b, __VA_ARGS__, #b))
+#define LET_ASSERT_ARRAY5(...) LET_EXPAND(LET_ASSERT_ARRAY6(__VA_ARGS__, LET_DECIMAL))
+#define LET_ASSERT_ARRAY4(...) LET_EXPAND(LET_ASSERT_ARRAY5(__VA_ARGS__, LET_DWORD))
+#define LET_ASSERT_ARRAY_FUNC(_1, _2, _3, _4, _5, _6, _7, NAME, ...) NAME
+#define LET_ASSERT_ARRAY(...) LET_EXPAND(LET_ASSERT_ARRAY_FUNC(__VA_ARGS__, LET_ASSERT_ARRAY7, LET_ASSERT_ARRAY6, LET_ASSERT_ARRAY5, LET_ASSERT_ARRAY4, ...)(__VA_ARGS__))
 
 
 
@@ -242,6 +221,18 @@ LET_ASSERT_RESULT LET_ASSERT_double(LET_ASSERT_COMPARE LET_assertion,
 LET_ASSERT_RESULT LET_ASSERT_str(LET_ASSERT_COMPARE LET_assertion,
                         char* obtained,
                         char* expected,
+                        char* name,
+                        LET_Test *itself
+#ifdef LET_FILE_AND_LINE
+                        ,char *file
+                        ,uint32_t line
+#endif
+);
+
+LET_ASSERT_RESULT LET_ASSERT_array(LET_ASSERT_COMPARE LET_assertion,
+                        char* obtained,
+                        char* expected,
+                        uint32_t size,
                         LET_ASSERT_PRECISION whitespace,
                         LET_ASSERT_REPRESENT format,
                         char* name,

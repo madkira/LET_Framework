@@ -54,12 +54,54 @@ extern void LET_Framework_printer (const char * data);
 // +---------------------------------------------+
 // | junit_format private  functions declaration |
 // +---------------------------------------------+
-/*Not Used*/
+void LET_assert_begin_printer(char *name,
+                  LET_ASSERT_TYPE type,
+                  LET_ASSERT_COMPARE compare
+ #ifdef LET_FILE_AND_LINE
+                  ,char *file
+                  ,uint32_t line
+ #endif
+);
+void LET_assert_end_printer(void);
 
 // +---------------------------------------------+
 // | junit_format private  functions definition  |
 // +---------------------------------------------+
-/*Not Used*/
+void LET_assert_begin_printer(char *name,
+                  LET_ASSERT_TYPE type,
+                  LET_ASSERT_COMPARE compare
+ #ifdef LET_FILE_AND_LINE
+                  ,char *file
+                  ,uint32_t line
+ #endif
+){
+ #ifdef LET_FILE_AND_LINE
+  char str_line[25] = {'\0'};
+  LET_uint_to_decimal_string(str_line, line);
+ #endif
+  LET_xml_open_balise(LET_FAILURE_BALISE, 1, 3, 0);
+  LET_xml_add_parameter(LET_FAILURE_MESSAGE_PARAMETER, name);
+  LET_xml_add_parameter(LET_FAILURE_TYPE_PARAMETER, LET_ASSERT_TYPE_STRING[type]);
+  LET_xml_close_balise(0);
+ #ifdef LET_FILE_AND_LINE
+  LET_Framework_printer(LET_FILE_PARAMETER_ASSERT);
+  LET_Framework_printer(file);
+
+  LET_Framework_printer(LET_LINE_PARAMETER_ASSERT);
+  LET_Framework_printer(str_line);
+
+ #endif
+
+  LET_Framework_printer(LET_COMPARE_PARAMETER_ASSERT);
+  LET_Framework_printer(LET_ASSERT_COMPARE_STRING[compare]);
+
+
+}
+
+void LET_assert_end_printer(void){
+  LET_xml_open_balise(LET_FAILURE_BALISE, 1, 3, 1);
+  LET_xml_close_balise(0);
+}
 
 // +---------------------------------------------+
 // | junit_format public  functions definition   |
@@ -102,8 +144,91 @@ void LET_test_end_printer(void){
   LET_xml_close_balise(0);
 }
 
-void LET_assert_printer(char *name,
-                  LET_ASSERT_TYPE type,
+
+void LET_assert_uint_printer(char *name,
+                  LET_ASSERT_COMPARE compare,
+                  uint64_t expected,
+                  uint64_t obtained,
+                  LET_ASSERT_PRECISION precision,
+                  LET_ASSERT_REPRESENT format
+ #ifndef LET_JUNIT
+                  ,LET_ASSERT_RESULT result
+ #endif
+ #ifdef LET_FILE_AND_LINE
+                  ,char *file
+                  ,uint32_t line
+ #endif
+){
+  LET_assert_begin_printer(name, LET_UINT, compare
+   #ifdef LET_FILE_AND_LINE
+                          ,file ,line
+   #endif
+  );
+  char conversion[70];
+
+  LET_Framework_printer(LET_EXPECTED_PARAMETER_ASSERT);
+  switch (format){
+    case LET_HEXADECIMAL:
+    case LET_OCTAL:
+    case LET_BINARY:
+      LET_uint_to_base_string(conversion, expected, format, precision);
+      LET_Framework_printer(conversion);
+      LET_Framework_printer(LET_OBTAINED_PARAMETER_ASSERT);
+      LET_uint_to_base_string(conversion, obtained, format, precision);
+      LET_Framework_printer(conversion);
+      break;
+
+    case LET_DECIMAL:
+    default:
+      LET_uint_to_decimal_string(conversion, expected);
+      LET_Framework_printer(conversion);
+      LET_Framework_printer(LET_OBTAINED_PARAMETER_ASSERT);
+      LET_uint_to_decimal_string(conversion, obtained);
+      LET_Framework_printer(conversion);
+      break;
+  }
+
+  LET_assert_end_printer();
+}
+
+
+
+void LET_assert_int_printer(char *name,
+                  LET_ASSERT_COMPARE compare,
+                  int64_t expected,
+                  int64_t obtained
+ #ifndef LET_JUNIT
+                  ,LET_ASSERT_RESULT result
+ #endif
+ #ifdef LET_FILE_AND_LINE
+                  ,char *file
+                  ,uint32_t line
+ #endif
+){
+  LET_assert_begin_printer(name, LET_INT, compare
+   #ifdef LET_FILE_AND_LINE
+                          ,file ,line
+   #endif
+  );
+
+  char conversion[25];
+
+  LET_Framework_printer(LET_EXPECTED_PARAMETER_ASSERT);
+  LET_int_to_string(conversion, expected);
+  LET_Framework_printer(conversion);
+  LET_Framework_printer(LET_OBTAINED_PARAMETER_ASSERT);
+  LET_int_to_string(conversion, obtained);
+  LET_Framework_printer(conversion);
+
+  LET_assert_end_printer();
+
+}
+
+
+
+
+
+void LET_assert_str_printer(char *name,
                   LET_ASSERT_COMPARE compare,
                   char *expected,
                   char *obtained
@@ -112,32 +237,53 @@ void LET_assert_printer(char *name,
                   ,uint32_t line
  #endif
 ){
- #ifdef LET_FILE_AND_LINE
-  char str_line[25] = {'\0'};
-  LET_uint_to_decimal_string(str_line, line);
- #endif
-  LET_xml_open_balise(LET_FAILURE_BALISE, 1, 3, 0);
-  LET_xml_add_parameter(LET_FAILURE_MESSAGE_PARAMETER, name);
-  LET_xml_add_parameter(LET_FAILURE_TYPE_PARAMETER, LET_ASSERT_TYPE_STRING[type]);
-  LET_xml_close_balise(0);
- #ifdef LET_FILE_AND_LINE
-  LET_Framework_printer(LET_FILE_PARAMETER_ASSERT);
-  LET_Framework_printer(file);
-
-  LET_Framework_printer(LET_LINE_PARAMETER_ASSERT);
-  LET_Framework_printer(str_line);
-
- #endif
-
-  LET_Framework_printer(LET_COMPARE_PARAMETER_ASSERT);
-  LET_Framework_printer(LET_ASSERT_COMPARE_STRING[compare]);
+  LET_assert_begin_printer(name, LET_STR, compare
+   #ifdef LET_FILE_AND_LINE
+                          ,file ,line
+   #endif
+  );
 
   LET_Framework_printer(LET_EXPECTED_PARAMETER_ASSERT);
   LET_Framework_printer(expected);
-
   LET_Framework_printer(LET_OBTAINED_PARAMETER_ASSERT);
   LET_Framework_printer(obtained);
 
-  LET_xml_open_balise(LET_FAILURE_BALISE, 1, 3, 1);
-  LET_xml_close_balise(0);
+
+  LET_assert_end_printer();
+}
+
+
+
+
+
+void LET_assert_array_printer(char *name,
+                  LET_ASSERT_COMPARE compare,
+                  LET_ASSERT_PRECISION whitespace,
+                  LET_ASSERT_REPRESENT format,
+                  char *expected,
+                  char *obtained,
+                  uint32_t size
+ #ifdef LET_FILE_AND_LINE
+                  ,char *file
+                  ,uint32_t line
+ #endif
+){
+  if(LET_BINARY != format){
+    format = LET_HEXADECIMAL;
+  }
+  LET_assert_begin_printer(name, LET_ARRAY, compare
+   #ifdef LET_FILE_AND_LINE
+                          ,file ,line
+   #endif
+  );
+
+  char conversion[(size*((LET_BINARY==format)?LET_BYTE_DIGIT : LET_HEXA_DIGIT)) + (size/whitespace)];
+  LET_Framework_printer(LET_EXPECTED_PARAMETER_ASSERT);
+  LET_array_convert(conversion, expected, size, format, whitespace);
+  LET_Framework_printer(conversion);
+  LET_Framework_printer(LET_OBTAINED_PARAMETER_ASSERT);
+  LET_array_convert(conversion, obtained, size, format, whitespace);
+  LET_Framework_printer(conversion);
+
+  LET_assert_end_printer();
 }
