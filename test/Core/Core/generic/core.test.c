@@ -55,13 +55,13 @@ void LET_end_printer(void){
   count_LET_end_printer++;
 }
 
-void LET_service_init_printer(char* name, uint8_t test_number){
-  if(!strcmp(LET_service_init_printer_expected_name[count_LET_service_init_printer], name)){
+void LET_service_init_printer(LET_Service *service){
+  if(!strcmp(LET_service_init_printer_expected_name[count_LET_service_init_printer], service->suite_name)){
     printf("OK\n");
   }else {
     printf("LET_service_init_printer name  KO\n");
   }
-  if(LET_service_init_printer_expected_test_number[count_LET_service_init_printer] == test_number){
+  if(LET_service_init_printer_expected_test_number[count_LET_service_init_printer] == service->test_num){
     printf("OK\n");
   }else {
     printf("LET_service_init_printer test_number  KO\n");
@@ -73,7 +73,7 @@ void LET_service_end_printer(void){
   count_LET_service_end_printer++;
 }
 
-void LET_test_init_printer(char* name){
+void LET_test_init_printer(const char *const name){
   if(!strcmp(LET_test_init_printer_expected_name[count_LET_test_init_printer], name)){
     printf("OK\n");
   }else {
@@ -112,6 +112,17 @@ void test_LET_service_init(void){
     }else {
         printf("service init name  KO\n");
     }
+    if(0==service_test.test_num){
+        printf("OK\n");
+    }else{
+        printf("service init test_num KO\n");
+    }
+    if(0==service_test.test_ignored){
+        printf("OK\n");
+    }else{
+        printf("service init test_ignored  KO\n");
+    }
+
     service_test.init_func();
     if(1==count_call_a){
         printf("OK\n");

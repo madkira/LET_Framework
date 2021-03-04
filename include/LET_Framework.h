@@ -10,7 +10,6 @@
 // +------------------------------------+
 // | LET_Framework Includes             |
 // +------------------------------------+
-#include "stdint.h"
 
 // +------------------------------------+
 // | LET_Framework Macros               |
@@ -75,16 +74,17 @@ typedef enum{
 // | LET_Framework Structures           |
 // +------------------------------------+
 typedef struct LET_Framework_Test {
-  char * test_name;
+  const char * test_name;
   void (*main_func)(struct LET_Framework_Test*);
   LET_ASSERT_RESULT result;
 }LET_Test;
 
 
 typedef struct LET_Framework_Service {
-  char* suite_name;
+  const char *suite_name;
   void (*init_func)(void);
   uint8_t test_num;
+  uint8_t test_ignored;
   LET_Test test_list[LET_MAX_TESTS];
 }LET_Service;
 
@@ -105,11 +105,11 @@ typedef struct LET_Framework_Service {
 #define LET_ASSERT_UINT_CALL(...) LET_ASSERT_uint(__VA_ARGS__)
 #endif
 #ifdef LET_FILE_AND_LINE
-#define LET_ASSERT_UINT6(...) LET_EXPAND(LET_ASSERT_UINT_CALL(__VA_ARGS__, itself, __FILE__, __LINE__))
+#define LET_ASSERT_UINT6(...) LET_EXPAND(LET_ASSERT_UINT_CALL(__VA_ARGS__, itself, (const char *const)__FILE__, __LINE__))
 #else
 #define LET_ASSERT_UINT6(...) LET_EXPAND(LET_ASSERT_UINT_CALL(__VA_ARGS__, itself))
 #endif
-#define LET_ASSERT_UINT5(a, b, ...)  LET_EXPAND(LET_ASSERT_UINT6(a, b, __VA_ARGS__, #b))
+#define LET_ASSERT_UINT5(a, b, ...)  LET_EXPAND(LET_ASSERT_UINT6(a, b, __VA_ARGS__, (const char *const)#b))
 #define LET_ASSERT_UINT4(...) LET_EXPAND(LET_ASSERT_UINT5(__VA_ARGS__, LET_DECIMAL))
 #define LET_ASSERT_UINT3(...) LET_EXPAND(LET_ASSERT_UINT4(__VA_ARGS__, LET_DWORD))
 #define LET_ASSERT_UINT_FUNC(_1, _2, _3, _4, _5, _6, NAME, ...) NAME
@@ -123,11 +123,11 @@ typedef struct LET_Framework_Service {
 #define LET_ASSERT_INT_CALL(...) LET_ASSERT_int(__VA_ARGS__)
 #endif
 #ifdef LET_FILE_AND_LINE
-#define LET_ASSERT_INT4(...) LET_ASSERT_INT_CALL(__VA_ARGS__, itself, __FILE__, __LINE__)
+#define LET_ASSERT_INT4(...) LET_ASSERT_INT_CALL(__VA_ARGS__, itself, (const char *const)__FILE__, __LINE__)
 #else
 #define LET_ASSERT_INT4(...) LET_ASSERT_int(__VA_ARGS__, itself)
 #endif
-#define LET_ASSERT_INT3(a, b, ...) LET_EXPAND(LET_ASSERT_INT4(a, b, __VA_ARGS__, #b))
+#define LET_ASSERT_INT3(a, b, ...) LET_EXPAND(LET_ASSERT_INT4(a, b, __VA_ARGS__, (const char *const)#b))
 #define LET_ASSERT_INT_FUNC(_1, _2, _3, _4, NAME, ...) NAME
 #define LET_ASSERT_INT(...) LET_EXPAND(LET_ASSERT_INT_FUNC(__VA_ARGS__, LET_ASSERT_INT4, LET_ASSERT_INT3, ...)(__VA_ARGS__))
 
@@ -138,11 +138,11 @@ typedef struct LET_Framework_Service {
 #define LET_ASSERT_STR_CALL(...) LET_ASSERT_str(__VA_ARGS__)
 #endif
 #ifdef LET_FILE_AND_LINE
-#define LET_ASSERT_STR4(...) LET_ASSERT_STR_CALL(__VA_ARGS__, itself, __FILE__, __LINE__)
+#define LET_ASSERT_STR4(...) LET_ASSERT_STR_CALL(__VA_ARGS__, itself, (const char *const)__FILE__, __LINE__)
 #else
 #define LET_ASSERT_STR4(...) LET_ASSERT_STR_CALL(__VA_ARGS__, itself)
 #endif
-#define LET_ASSERT_STR3(a, b, ...) LET_EXPAND(LET_ASSERT_STR4(a, b, __VA_ARGS__, #b))
+#define LET_ASSERT_STR3(a, b, ...) LET_EXPAND(LET_ASSERT_STR4(a, b, __VA_ARGS__, (const char *const)#b))
 #define LET_ASSERT_STR_FUNC(_1, _2, _3, _4, NAME, ...) NAME
 #define LET_ASSERT_STR(...) LET_EXPAND(LET_ASSERT_STR_FUNC(__VA_ARGS__, LET_ASSERT_STR4, LET_ASSERT_STR3, ...)(__VA_ARGS__))
 
@@ -153,11 +153,11 @@ typedef struct LET_Framework_Service {
 #define LET_ASSERT_ARRAY_CALL(...) LET_ASSERT_array(__VA_ARGS__)
 #endif
 #ifdef LET_FILE_AND_LINE
-#define LET_ASSERT_ARRAY7(...) LET_ASSERT_ARRAY_CALL(__VA_ARGS__, itself, __FILE__, __LINE__)
+#define LET_ASSERT_ARRAY7(...) LET_ASSERT_ARRAY_CALL(__VA_ARGS__, itself, (const char *const)__FILE__, __LINE__)
 #else
 #define LET_ASSERT_ARRAY7(...) LET_ASSERT_ARRAY_CALL(__VA_ARGS__, itself)
 #endif
-#define LET_ASSERT_ARRAY6(a, b, ...) LET_EXPAND(LET_ASSERT_ARRAY7(a, b, __VA_ARGS__, #b))
+#define LET_ASSERT_ARRAY6(a, b, ...) LET_EXPAND(LET_ASSERT_ARRAY7(a, b, __VA_ARGS__, (const char *const)#b))
 #define LET_ASSERT_ARRAY5(...) LET_EXPAND(LET_ASSERT_ARRAY6(__VA_ARGS__, LET_DECIMAL))
 #define LET_ASSERT_ARRAY4(...) LET_EXPAND(LET_ASSERT_ARRAY5(__VA_ARGS__, LET_DWORD))
 #define LET_ASSERT_ARRAY_FUNC(_1, _2, _3, _4, _5, _6, _7, NAME, ...) NAME
@@ -171,10 +171,10 @@ LET_ASSERT_RESULT LET_ASSERT_uint(LET_ASSERT_COMPARE LET_assertion,
                           uint64_t expected,
                           LET_ASSERT_PRECISION precision,
                           LET_ASSERT_REPRESENT format,
-                          char* name,
+                          const char *const  name,
                           LET_Test *itself
 #ifdef LET_FILE_AND_LINE
-                          ,char *file
+                          ,const char *const file
                           ,uint32_t line
 #endif
 );
@@ -182,10 +182,10 @@ LET_ASSERT_RESULT LET_ASSERT_uint(LET_ASSERT_COMPARE LET_assertion,
 LET_ASSERT_RESULT LET_ASSERT_int(LET_ASSERT_COMPARE LET_assertion,
                         int64_t obtained,
                         int64_t expected,
-                        char* name,
+                        const char *const  name,
                         LET_Test *itself
 #ifdef LET_FILE_AND_LINE
-                        ,char *file
+                        ,const char *const file
                         ,uint32_t line
 #endif
 );
@@ -196,10 +196,10 @@ LET_ASSERT_RESULT LET_ASSERT_float(LET_ASSERT_COMPARE LET_assertion,
                           float delta,
                           uint8_t precision,
                           LET_ASSERT_REPRESENT format,
-                          char* name,
+                          const char *const  name,
                           LET_Test *itself
 #ifdef LET_FILE_AND_LINE
-                          ,char *file
+                          ,const char *const file
                           ,uint32_t line
 #endif
 );
@@ -210,35 +210,35 @@ LET_ASSERT_RESULT LET_ASSERT_double(LET_ASSERT_COMPARE LET_assertion,
                             double delta,
                             uint8_t precision,
                             LET_ASSERT_REPRESENT format,
-                            char* name,
+                            const char *const  name,
                             LET_Test *itself
 #ifdef LET_FILE_AND_LINE
-                            ,char *file
+                            ,const char *const file
                             ,uint32_t line
 #endif
 );
 
 LET_ASSERT_RESULT LET_ASSERT_str(LET_ASSERT_COMPARE LET_assertion,
-                        char* obtained,
-                        char* expected,
-                        char* name,
+                        const char *const obtained,
+                        const char *const expected,
+                        const char *const  name,
                         LET_Test *itself
 #ifdef LET_FILE_AND_LINE
-                        ,char *file
+                        ,const char *const file
                         ,uint32_t line
 #endif
 );
 
 LET_ASSERT_RESULT LET_ASSERT_array(LET_ASSERT_COMPARE LET_assertion,
-                        char* obtained,
-                        char* expected,
+                        const char *const obtained,
+                        const char *const expected,
                         uint32_t size,
                         LET_ASSERT_PRECISION whitespace,
                         LET_ASSERT_REPRESENT format,
-                        char* name,
+                        const char *const  name,
                         LET_Test *itself
 #ifdef LET_FILE_AND_LINE
-                        ,char *file
+                        ,const char *const file
                         ,uint32_t line
 #endif
 );
@@ -246,8 +246,8 @@ LET_ASSERT_RESULT LET_ASSERT_array(LET_ASSERT_COMPARE LET_assertion,
 void LET_init(void);
 void LET_end(void);
 
-LET_Service LET_service_init(char* name, void (*func)(void));
-LET_CORE_EXCEPTION LET_test_register(LET_Service *service, char * name, void (*func)(LET_Test *));
-void LET_service_runner(LET_Service *service);
+LET_Service LET_service_init(const char *const name, void (*func)(void));
+LET_CORE_EXCEPTION LET_test_register(LET_Service *const service, const char *const name, void (*func)(LET_Test *));
+void LET_service_runner(LET_Service *const service);
 
 #endif //D_LET_Framework_H_

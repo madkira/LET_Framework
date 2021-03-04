@@ -9,8 +9,9 @@
 // +---------------------------------------------+
 // | json_format includes                        |
 // +---------------------------------------------+
-#include "stdint.h"
+#include <stdint.h>
 
+#include "LET_Framework.h"
 #include "LET_Framework_Result.h"
 #include "LET_util_format_string.h"
 
@@ -32,7 +33,7 @@
 // +---------------------------------------------+
 // | json_format extern   functions definition   |
 // +---------------------------------------------+
-extern void LET_Framework_printer (const char * data);
+extern void LET_Framework_printer (const char *const data);
 
 // +---------------------------------------------+
 // | json_format private   functions definition  |

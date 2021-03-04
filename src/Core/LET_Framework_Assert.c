@@ -9,6 +9,8 @@
 // +----------------------------------------------------+
 // | LET_Framework_Assert includes                      |
 // +----------------------------------------------------+
+#include <stdint.h>
+
 #include "LET_Framework.h"
 #include "LET_Framework_Result.h"
 #include "LET_util_format_string.h"
@@ -19,7 +21,7 @@
 #define LET_BYTE_MASK  0xFFu
 #define LET_WORD_MASK  0xFFFFu
 #define LET_DWORD_MASK 0xFFFFFFFFu
-#define LET_QWORD_MASK 0xFFFFFFFFFFFFFFFFu
+#define LET_QWORD_MASK 0xFFFFFFFFFFFFFFFFuL
 
 
 // +----------------------------------------------------+
@@ -50,10 +52,10 @@ LET_ASSERT_RESULT LET_ASSERT_uint(LET_ASSERT_COMPARE assertion,
                           uint64_t expected,
                           LET_ASSERT_PRECISION precision,
                           LET_ASSERT_REPRESENT format,
-                          char* name,
+                          const char *const name,
                           LET_Test *itself
  #ifdef LET_FILE_AND_LINE
-                          ,char *file
+                          ,const char *const file
                           ,uint32_t line
  #endif
 ){
@@ -113,10 +115,10 @@ LET_ASSERT_RESULT LET_ASSERT_uint(LET_ASSERT_COMPARE assertion,
 LET_ASSERT_RESULT LET_ASSERT_int(LET_ASSERT_COMPARE assertion,
                         int64_t obtained,
                         int64_t expected,
-                        char* name,
+                        const char *const name,
                         LET_Test *itself
 #ifdef LET_FILE_AND_LINE
-                        ,char *file
+                        ,const char *const file
                         ,uint32_t line
 #endif
 ){
@@ -166,12 +168,12 @@ LET_ASSERT_RESULT LET_ASSERT_int(LET_ASSERT_COMPARE assertion,
 
 
 LET_ASSERT_RESULT LET_ASSERT_str(LET_ASSERT_COMPARE assertion,
-                        char* obtained,
-                        char* expected,
-                        char* name,
+                        const char *const obtained,
+                        const char *const expected,
+                        const char *const name,
                         LET_Test *itself
 #ifdef LET_FILE_AND_LINE
-                        ,char *file
+                        ,const char *const file
                         ,uint32_t line
 #endif
 ){
@@ -210,15 +212,15 @@ LET_ASSERT_RESULT LET_ASSERT_str(LET_ASSERT_COMPARE assertion,
 
 
 LET_ASSERT_RESULT LET_ASSERT_array(LET_ASSERT_COMPARE assertion,
-                        char* obtained,
-                        char* expected,
+                        const char *const obtained,
+                        const char *const expected,
                         uint32_t size,
                         LET_ASSERT_PRECISION whitespace,
                         LET_ASSERT_REPRESENT format,
-                        char* name,
+                        const char *const name,
                         LET_Test *itself
 #ifdef LET_FILE_AND_LINE
-                        ,char *file
+                        ,const char *const file
                         ,uint32_t line
 #endif
 ){

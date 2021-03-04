@@ -9,6 +9,7 @@
 // +--------------------------------------------------+
 // | LET_Framework_Core includes                      |
 // +--------------------------------------------------+
+#include <stdint.h>
 #include "LET_Framework.h"
 #include "LET_Framework_Result.h"
 
@@ -47,27 +48,33 @@ void LET_end(void){
   LET_end_printer();
 }
 
-LET_Service LET_service_init(char* name, void (*func)(void)){
+LET_Service LET_service_init(const char *const name, void (*func)(void)){
   LET_Service new_service;
   new_service.suite_name = name;
   new_service.init_func = func;
   new_service.test_num = 0;
+  new_service.test_ignored = 0;
   return new_service;
 }
 
-LET_CORE_EXCEPTION LET_test_register(LET_Service *service, char * name, void (*func)(LET_Test *)){
-  LET_Test new_test;
-  new_test.test_name = name;
-  new_test.main_func = func;
-  new_test.result = LET_OK;
-  if(service->test_num >= LET_MAX_TESTS) return LET_CORE_KO;
-  service->test_list[service->test_num++] = new_test;
-  return LET_CORE_OK;
+LET_CORE_EXCEPTION LET_test_register(LET_Service *const service, const char *const name, void (*func)(LET_Test *)){
+  LET_CORE_EXCEPTION result = LET_CORE_KO;
+  if(service->test_num < LET_MAX_TESTS){
+    LET_Test new_test;
+    new_test.test_name = name;
+    new_test.main_func = func;
+    new_test.result = LET_OK;
+    service->test_list[service->test_num++] = new_test;
+    result =  LET_CORE_OK;
+  }else{
+    service->test_ignored++;
+  }
+  return result;
 }
 
-void LET_service_runner(LET_Service *service){
+void LET_service_runner(LET_Service *const service){
   LET_Test * current_test;
-  LET_service_init_printer(service->suite_name, service->test_num);
+  LET_service_init_printer(service);
   for(uint8_t  i = 0; i < service->test_num; i++){
     current_test = &service->test_list[i];
     LET_test_init_printer(current_test->test_name

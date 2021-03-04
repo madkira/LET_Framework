@@ -9,8 +9,9 @@
 // +------------------------------------------+
 // | xml_format includes                      |
 // +------------------------------------------+
-#include "stdint.h"
+#include <stdint.h>
 
+#include "LET_Framework.h"
 #include "LET_Framework_Result.h"
 #include "LET_util_format_string.h"
 #include "LET_util_xml_format.h"
@@ -60,7 +61,7 @@
 // +-------------------------------------------+
 // | xml_format extern functions               |
 // +-------------------------------------------+
-extern void LET_Framework_printer(const char * data);
+extern void LET_Framework_printer(const char *const data);
 
 // +------------------------------------------+
 // | xml_format private functions declaration |
@@ -86,12 +87,12 @@ void LET_end_printer(void){
   LET_Framework_printer("\n");
 }
 
-void LET_service_init_printer(char* name, uint8_t test_number){
+void LET_service_init_printer(LET_Service *service){
   char number[5] = {'\0'};
-  LET_uint_to_decimal_string(number, test_number);
+  LET_uint_to_decimal_string(number, service->test_num);
   LET_xml_open_balise(LET_BALISE_SERVICE, 1, 1, 0);
-  LET_xml_add_parameter(LET_NAME_PARAMETER_SERVICE, name);
-  LET_xml_add_parameter(LET_NB_TEST_PARAMETER_SERVICE, number);
+  LET_xml_add_str_parameter(LET_NAME_PARAMETER_SERVICE, service->suite_name);
+  LET_xml_add_str_parameter(LET_NB_TEST_PARAMETER_SERVICE, number);
   LET_xml_close_balise(0);
 }
 
@@ -100,9 +101,9 @@ void LET_service_end_printer(void){
   LET_xml_close_balise(0);
 }
 
-void LET_test_init_printer(char* name){
+void LET_test_init_printer(const char *const name){
   LET_xml_open_balise(LET_BALISE_TEST, 1, 2, 0);
-  LET_xml_add_parameter(LET_NAME_PARAMETER_TEST, name);
+  LET_xml_add_str_parameter(LET_NAME_PARAMETER_TEST, name);
   LET_xml_close_balise(0);
 }
 
@@ -116,14 +117,14 @@ void LET_test_end_printer(LET_ASSERT_RESULT result){
   LET_xml_close_balise(0);
 }
 
-void LET_assert_printer(char *name,
+void LET_assert_printer(const char *const name,
                   LET_ASSERT_TYPE type,
                   LET_ASSERT_COMPARE compare,
-                  char *expected,
-                  char *obtained,
+                  const char *const expected,
+                  const char *const obtained,
                   LET_ASSERT_RESULT result
  #ifdef LET_FILE_AND_LINE
-                  ,char *file
+                  ,const char *const file
                   ,uint32_t line
  #endif
 ){
@@ -136,11 +137,11 @@ void LET_assert_printer(char *name,
   LET_xml_add_parameter(FILE_PARAMETER_ASSERT, file);
   LET_xml_add_parameter(LINE_PARAMETER_ASSERT, str_line);
  #endif
-  LET_xml_add_parameter(LET_NAME_PARAMETER_ASSERT, name);
-  LET_xml_add_parameter(LET_TYPE_PARAMETER_ASSERT, LET_ASSERT_TYPE_STRING[type]);
-  LET_xml_add_parameter(LET_COMPARE_PARAMETER_ASSERT, LET_ASSERT_COMPARE_STRING[compare]);
-  LET_xml_add_parameter(LET_EXPECTED_PARAMETER_ASSERT, expected);
-  LET_xml_add_parameter(LET_OBTAINED_PARAMETER_ASSERT, obtained);
-  LET_xml_add_parameter(LET_VALID_PARAMETER_ASSERT, LET_ASSERT_RESULT_STRING[result]);
+  LET_xml_add_str_parameter(LET_NAME_PARAMETER_ASSERT, name);
+  LET_xml_add_str_parameter(LET_TYPE_PARAMETER_ASSERT, LET_ASSERT_TYPE_STRING[type]);
+  LET_xml_add_str_parameter(LET_COMPARE_PARAMETER_ASSERT, LET_ASSERT_COMPARE_STRING[compare]);
+  LET_xml_add_str_parameter(LET_EXPECTED_PARAMETER_ASSERT, expected);
+  LET_xml_add_str_parameter(LET_OBTAINED_PARAMETER_ASSERT, obtained);
+  LET_xml_add_str_parameter(LET_VALID_PARAMETER_ASSERT, LET_ASSERT_RESULT_STRING[result]);
   LET_xml_close_balise(1);
 }

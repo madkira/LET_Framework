@@ -9,8 +9,9 @@
 // +-------------------------------------------+
 // | text_format includes                      |
 // +-------------------------------------------+
-#include "stdint.h"
+#include <stdint.h>
 
+#include "LET_Framework.h"
 #include "LET_Framework_Result.h"
 #include "LET_util_format_string.h"
 
@@ -34,7 +35,7 @@
 // +-------------------------------------------+
 // | text_format extern functions definition   |
 // +-------------------------------------------+
-extern void LET_Framework_printer(const char * data);
+extern void LET_Framework_printer(const char *const  data);
 
 // +-------------------------------------------+
 // | text_format private functions definition  |
@@ -53,21 +54,21 @@ extern void LET_Framework_printer(const char * data);
 void LET_init_printer(void){;}
 void LET_end_printer(void){;}
 
-void LET_service_init_printer(char* name, uint8_t test_number){
+void LET_service_init_printer(LET_Service *service){
   char number[5] = {'\n'};
-  LET_uint_to_decimal_string(number, test_number);
+  LET_uint_to_decimal_string(number, service->test_num);
   LET_Framework_printer("Service Begin \"");
-  LET_Framework_printer(name);
+  LET_Framework_printer(service->suite_name);
   LET_Framework_printer("\" with ");
   LET_Framework_printer(number);
-  LET_Framework_printer((test_number>1)?" tests :":" test :");
+  LET_Framework_printer((service->test_num>1)?" tests :":" test :");
 }
 
 void LET_service_end_printer(void){
   LET_Framework_printer("\nService End\n");
 }
 
-void LET_test_init_printer(char* name){
+void LET_test_init_printer(const char *const name){
   LET_Framework_printer("\n| Test Begin \"");
   LET_Framework_printer(name);
   LET_Framework_printer("\"");
@@ -78,14 +79,14 @@ void LET_test_end_printer(LET_ASSERT_RESULT result){
   LET_Framework_printer((LET_OK==result)?"PASSED":"FAILED");
 }
 
-void LET_assert_printer(char *name,
+void LET_assert_printer(const char *const name,
                   LET_ASSERT_TYPE type,
                   LET_ASSERT_COMPARE compare,
-                  char *expected,
-                  char *obtained,
+                  const char *const expected,
+                  const char *const obtained,
                   LET_ASSERT_RESULT result
  #ifdef LET_FILE_AND_LINE
-                  ,char *file
+                  ,const char *const file
                   ,uint32_t line
  #endif
 ){

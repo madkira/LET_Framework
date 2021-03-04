@@ -10,7 +10,6 @@
 // +-------------------------------------------+
 // | LET_Framework_Result Includes             |
 // +-------------------------------------------+
-#include "LET_Framework.h"
 
 // +-------------------------------------------+
 // | LET_Framework_Result Types                |
@@ -41,8 +40,14 @@ extern const char *LET_ASSERT_RESULT_STRING[];
 void LET_uint_to_decimal_string(char str[], uint64_t num);
 void LET_uint_to_base_string(char str[], uint64_t num, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION bytes);
 void LET_int_to_string(char str[], int64_t num);
-int8_t LET_compare_str(char *a, char *b);
-uint32_t LET_str_size(char *a);
-void LET_array_convert(char dest[], char *src, uint32_t size, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace);
+int8_t LET_compare_str(const char * a, const char * b);
+// uint32_t LET_str_size(const char *const a);
+void LET_array_convert(char dest[], const char *const src, uint32_t size, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace);
+
+
+void LET_uint_to_decimal_printer(uint64_t num);
+void LET_int_printer(int64_t num);
+void LET_uint_to_base_printer(uint64_t num, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION bytes);
+void LET_array_printer(const char *const src, uint32_t size, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace);
 
 #endif //D_UTIL_FORMAT_H_

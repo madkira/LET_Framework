@@ -9,8 +9,10 @@
 // +---------------------------------------------------+
 // | LET_util_xml_format includes                      |
 // +---------------------------------------------------+
-#include "stdint.h"
+#include <stdint.h>
 
+#include "LET_Framework.h"
+#include "LET_util_format_string.h"
 #include "LET_util_xml_format.h"
 
 // +---------------------------------------------------+
@@ -51,10 +53,30 @@ void LET_xml_close_balise(uint8_t standalone){
   LET_Framework_printer(">");
 }
 
-void LET_xml_add_parameter(const char *parameter_name, const char* value){
+void LET_xml_add_str_parameter(const char *parameter_name, const char* value){
   LET_Framework_printer(" ");
   LET_Framework_printer(parameter_name);
   LET_Framework_printer("=\"");
   LET_Framework_printer(value);
+  LET_Framework_printer("\"");
+}
+
+void LET_xml_add_uint_parameter(const char *parameter_name, uint64_t num, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION bytes){
+  LET_Framework_printer(" ");
+  LET_Framework_printer(parameter_name);
+  LET_Framework_printer("=\"");
+  if(LET_DECIMAL ==  format){
+    LET_uint_to_decimal_printer(num);
+  }else{
+    LET_uint_to_base_printer(num, format, bytes);
+  }
+  LET_Framework_printer("\"");
+}
+
+void LET_xml_add_int_parameter(const char *parameter_name, int64_t num){
+  LET_Framework_printer(" ");
+  LET_Framework_printer(parameter_name);
+  LET_Framework_printer("=\"");
+  LET_int_printer(num);
   LET_Framework_printer("\"");
 }

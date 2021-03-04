@@ -10,9 +10,10 @@
 // | LET_Framework_Result includes                      |
 // +----------------------------------------------------+
 // Temporary Shared library Might be removed for no dependency purpose
-#include "stdint.h"
-#include "LET_util_format_string.h"
+#include <stdint.h>
+#include "LET_Framework.h"
 #include "LET_Framework_Result.h"
+#include "LET_util_format_string.h"
 
 // +----------------------------------------------------+
 // | LET_Framework_Result macros                        |
@@ -55,18 +56,18 @@ const char *LET_ASSERT_RESULT_STRING[] = {
 // +----------------------------------------------------+
 // | LET_Framework_Result extern functions definition   |
 // +----------------------------------------------------+
-/*Not Used*/
+extern void LET_Framework_printer(const char *const data);
 
 
 // +----------------------------------------------------+
 // | LET_Framework_Result private functions definition  |
 // +----------------------------------------------------+
-uint64_t LET_str_to_uint64(char*a, LET_ASSERT_PRECISION whitespace);
+uint64_t LET_str_to_uint64(const char *const a, LET_ASSERT_PRECISION whitespace);
 
 // +----------------------------------------------------+
 // | LET_Framework_Result private functions declaration |
 // +----------------------------------------------------+
-uint64_t LET_str_to_uint64(char*a, LET_ASSERT_PRECISION whitespace){
+uint64_t LET_str_to_uint64(const char *const a, LET_ASSERT_PRECISION whitespace){
   uint64_t result = 0u;
   for(uint8_t i=0; i < whitespace; i++ ){
     result = result<<8 | (uint8_t) a[i];
@@ -125,7 +126,7 @@ void LET_int_to_string(char str[], int64_t num){
 }
 
 
-int8_t LET_compare_str(char *a, char *b){
+int8_t LET_compare_str(const char * a, const char * b){
   while( ( *a != '\0' && *b != '\0' ) && *a == *b ){
     a++;
     b++;
@@ -134,7 +135,7 @@ int8_t LET_compare_str(char *a, char *b){
 }
 
 
-void LET_array_convert(char dest[], char *src, uint32_t size, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace){
+void LET_array_convert(char dest[], const char *const src, uint32_t size, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace){
   uint32_t i = 0;
   uint16_t position = 0;
   uint64_t buffer = 0;
@@ -148,4 +149,63 @@ void LET_array_convert(char dest[], char *src, uint32_t size, LET_ASSERT_REPRESE
     position += LET_convert_uint_to_base(dest+position, buffer, format, LET_BYTE);
   }
   dest[position-((size%whitespace)?0:1)]='\0';
+}
+
+
+
+void LET_uint_to_decimal_printer(uint64_t num){
+  char data[] = "\0";
+  uint64_t  n = 1u;
+
+  while (n <= num/10u){
+    n *= 10u;
+  }
+  for (; n > 0; n/=10){
+    data[0] = LET_CHAR_HEXADECIMAL[(num/n)%10];
+    LET_Framework_printer(data);
+  }
+}
+void LET_int_printer(int64_t num){
+    if(num < 0){
+      LET_Framework_printer("-");
+      LET_uint_to_decimal_printer((uint64_t) - num);
+    }else{
+      LET_uint_to_decimal_printer((uint64_t) num);
+    }
+}
+
+
+void LET_convert_uint_to_base_printer(uint64_t num, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION bytes){
+  char data[] = "\0";
+  uint8_t i;
+  uint8_t mask_format = (uint8_t) (LET_BINARY == format)? LET_MASK_BINARY : (LET_OCTAL == format)? LET_MASK_OCTAL : LET_MASK_HEXADECIMAL;
+  uint8_t bit_number = (uint8_t) (LET_BINARY == format)? LET_BIT_NUMBER_BINARY : (LET_OCTAL == format)? LET_BIT_NUMBER_OCTAL : LET_BIT_NUMBER_HEXADECIMAL;
+  uint8_t character_number = (uint8_t) (((LET_OCTAL == format)?2:0) +(bytes*8))/bit_number;
+  for(i=0; i < character_number; i++){
+    data[0] = LET_CHAR_HEXADECIMAL[(num>>((character_number-i-1)*bit_number))&mask_format];
+    LET_Framework_printer(data);
+  }
+}
+
+
+void LET_uint_to_base_printer(uint64_t num, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION bytes){
+  char data[] = "0\0";
+  data[1] = (LET_BINARY == format)? LET_BEGIN_BINARY : (LET_OCTAL == format)? LET_BEGIN_OCTAL : LET_BEGIN_HEXADECIMAL;
+  LET_Framework_printer(data);
+  LET_convert_uint_to_base_printer(num, format, bytes);
+}
+
+
+void LET_array_printer(const char *const src, uint32_t size, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace){
+  uint32_t i = 0;
+  uint64_t buffer = 0;
+  for (; i<size/whitespace; i++){
+    buffer = LET_str_to_uint64(src+(i*whitespace), whitespace);
+    LET_convert_uint_to_base_printer(buffer, format, whitespace);
+    LET_Framework_printer(" ");
+  }
+  for(uint8_t j = 0; j < size%whitespace; j++){
+    buffer = LET_str_to_uint64(src+j+(i*whitespace), LET_BYTE);
+    LET_convert_uint_to_base_printer(buffer, format, LET_BYTE);
+  }
 }

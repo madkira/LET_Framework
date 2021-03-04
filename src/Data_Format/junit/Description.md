@@ -9,6 +9,7 @@ JUnit standard format reduice to minimal element due to limitations in the syste
                     Class name without the package for aggregated testsuites documents. Required -->
         tests=""     <!-- The total number of tests in the suite, required. -->
         >
+        disabled=""  <!-- the total number of disabled tests in the suite. optional -->
 
         <!-- testcase can appear multiple times, see /testsuites/testsuite@tests -->
         <testcase name=""       <!-- Name of the test method, required. -->

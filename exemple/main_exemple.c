@@ -1,11 +1,12 @@
-#include "stdio.h"
+#include <stdint.h>
+#include <stdio.h>
 #include "LET_Framework.h"
 
 void empty_init (void){
 
 }
 
-void LET_Framework_printer (const char * data){
+void LET_Framework_printer (const char * const data){
     printf("%s",data);
 }
 

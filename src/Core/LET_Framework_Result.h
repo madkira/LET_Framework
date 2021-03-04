@@ -10,7 +10,6 @@
 // +-------------------------------------------+
 // | LET_Framework_Result Includes             |
 // +-------------------------------------------+
-#include "LET_Framework.h"
 
 // +-------------------------------------------+
 // | LET_Framework_Result Types                |
@@ -50,24 +49,29 @@ typedef enum {
 // | LET_Framework_Result Functions Definition |
 // +-------------------------------------------+
 void LET_init_printer(void);
+
 void LET_end_printer(void);
-void LET_service_init_printer(char *name, uint8_t test_number);
+
+void LET_service_init_printer(LET_Service *const service);
+
 void LET_service_end_printer(void);
-void LET_test_init_printer(char *name
+
+void LET_test_init_printer(const char *const name
  #ifdef LET_JUNIT
-                            ,char *service_name
+                            ,const char *const service_name
  #endif
 );
+
 void LET_test_end_printer(
  #ifndef LET_JUNIT
                         LET_ASSERT_RESULT result
  #else
                         void
  #endif
-    );
+);
 
 
-void LET_assert_uint_printer(char *name,
+void LET_assert_uint_printer(const char *const name,
                   LET_ASSERT_COMPARE compare,
                   uint64_t expected,
                   uint64_t obtained,
@@ -77,14 +81,14 @@ void LET_assert_uint_printer(char *name,
                   ,LET_ASSERT_RESULT result
  #endif
  #ifdef LET_FILE_AND_LINE
-                  ,char *file
+                  ,const char *const file
                   ,uint32_t line
  #endif
 );
 
 
 
-void LET_assert_int_printer(char *name,
+void LET_assert_int_printer(const char *const name,
                   LET_ASSERT_COMPARE compare,
                   int64_t expected,
                   int64_t obtained
@@ -92,38 +96,38 @@ void LET_assert_int_printer(char *name,
                   ,LET_ASSERT_RESULT result
  #endif
  #ifdef LET_FILE_AND_LINE
-                  ,char *file
+                  ,const char *const file
                   ,uint32_t line
  #endif
 );
 
 
 
-void LET_assert_str_printer(char *name,
+void LET_assert_str_printer(const char *const name,
                   LET_ASSERT_COMPARE compare,
-                  char *expected,
-                  char *obtained
+                  const char *const expected,
+                  const char *const obtained
  #ifndef LET_JUNIT
                   ,LET_ASSERT_RESULT result
  #endif
  #ifdef LET_FILE_AND_LINE
-                  ,char *file
+                  ,const char *const file
                   ,uint32_t line
  #endif
 );
 
-void LET_assert_array_printer(char *name,
+void LET_assert_array_printer(const char *const name,
                   LET_ASSERT_COMPARE compare,
                   LET_ASSERT_PRECISION whitespace,
                   LET_ASSERT_REPRESENT format,
-                  char *expected,
-                  char *obtained,
+                  const char *const expected,
+                  const char *const obtained,
                   uint32_t size
  #ifndef LET_JUNIT
                   ,LET_ASSERT_RESULT result
  #endif
  #ifdef LET_FILE_AND_LINE
-                  ,char *file
+                  ,const char *const file
                   ,uint32_t line
  #endif
 );
