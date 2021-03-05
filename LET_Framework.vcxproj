@@ -77,7 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\include;$(MSBuildProjectDirectory)\src\Core;$(MSBuildProjectDirectory)\src\Data_Format\util</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>FORMAT=junit;LET_JUNIT;LET_FILE_AND_LINE;LET_ONLY_FAILED_ASSERT;LET_STOP_TEST_ON_FAILED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LET_JUNIT;LET_ONLY_FAILED_ASSERT;LET_STOP_TEST_ON_FAILED;$(LET_PARAMETER);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -87,7 +87,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\include;$(MSBuildProjectDirectory)\src\Core;$(MSBuildProjectDirectory)\src\Data_Format\util</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>FORMAT=junit;LET_JUNIT;LET_FILE_AND_LINE;LET_ONLY_FAILED_ASSERT;LET_STOP_TEST_ON_FAILED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LET_JUNIT;LET_ONLY_FAILED_ASSERT;LET_STOP_TEST_ON_FAILED;$(LET_PARAMETER);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -99,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\include;$(MSBuildProjectDirectory)\src\Core;$(MSBuildProjectDirectory)\src\Data_Format\util</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>FORMAT=junit;LET_JUNIT;LET_FILE_AND_LINE;LET_ONLY_FAILED_ASSERT;LET_STOP_TEST_ON_FAILED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LET_JUNIT;LET_ONLY_FAILED_ASSERT;LET_STOP_TEST_ON_FAILED;$(LET_PARAMETER);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -115,7 +115,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\include;$(MSBuildProjectDirectory)\src\Core;$(MSBuildProjectDirectory)\src\Data_Format\util</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>FORMAT=junit;LET_JUNIT;LET_FILE_AND_LINE;LET_ONLY_FAILED_ASSERT;LET_STOP_TEST_ON_FAILED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LET_JUNIT;LET_ONLY_FAILED_ASSERT;LET_STOP_TEST_ON_FAILED;$(LET_PARAMETER);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
