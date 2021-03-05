@@ -18,6 +18,7 @@
 #define LET_MAX_TESTS 10
 #endif
 
+#define LET_UNUSED(x) (void)(x)
 #define LET_GENERATE_ENUM(ENUM) LET_ ## ENUM,
 
 // +------------------------------------+
