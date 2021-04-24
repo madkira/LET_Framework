@@ -98,6 +98,14 @@ typedef struct LET_Framework_Service {
 // +------------------------------------+
 #define LET_EXPAND(...) __VA_ARGS__
 
+#ifdef LET_AUTO_DECLARE
+#define LET_TEST(function_name) static void function_name(LET_Test *itself); static void function_name(LET_Test *itself)
+#define LET_INIT_TEST(function_name) static void function_name(void); static void function_name(void)
+#else
+#define LET_TEST(function_name)  static void function_name(LET_Test *itself)
+#define LET_INIT_TEST(function_name) static  void function_name(void)
+#endif
+
 
 #ifdef LET_STOP_TEST_ON_FAILED
 #define LET_ASSERT_UINT_CALL(...) if(LET_KO==LET_ASSERT_uint(__VA_ARGS__))return

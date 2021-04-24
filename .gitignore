@@ -13,3 +13,6 @@ _deps
 Release
 Debug
 x64
+.vs/
+*.user
+.vscode
