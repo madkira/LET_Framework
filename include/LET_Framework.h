@@ -7,6 +7,11 @@
 *******************************************************************************/
 #ifndef D_LET_Framework_H_
 #define D_LET_Framework_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // +------------------------------------+
 // | LET_Framework Includes             |
 // +------------------------------------+
@@ -18,6 +23,7 @@
 #define LET_MAX_TESTS 10
 #endif
 
+#define LET_UNUSED(x) (void)(x)
 #define LET_GENERATE_ENUM(ENUM) LET_ ## ENUM,
 
 // +------------------------------------+
@@ -257,5 +263,11 @@ void LET_end(void);
 LET_Service LET_service_init(const char *const name, void (*func)(void));
 LET_CORE_EXCEPTION LET_test_register(LET_Service *const service, const char *const name, void (*func)(LET_Test *));
 void LET_service_runner(LET_Service *const service);
+
+extern void LET_Framework_printer (const char * data);
+
+#ifdef __cplusplus
+}                                                               /* End of 'extern'al C lang linkage.  */
+#endif
 
 #endif //D_LET_Framework_H_
