@@ -1,4 +1,4 @@
 <Project>
-  <!-- Import Solution Directory.Build.porps if present -->
-  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(SolutionDir)'))" />>
+  <!-- Import Solution Directory.Build.props if present -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(SolutionDir)'))" />
 </Project>
