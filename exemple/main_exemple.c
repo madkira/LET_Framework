@@ -6,6 +6,13 @@ void empty_init (void){
 
 }
 
+void function_to_test(uint8_t number){
+    printf("In code debug %u", number);
+}
+void function_to_test_multiline(void){
+    printf("\nalpha\nbeta\ncharly\ndelta\necho\n");
+}
+
 void LET_Framework_printer (const char * const data){
     printf("%s",data);
 }
@@ -133,6 +140,17 @@ void rename_assertion (LET_Test *itself){
     LET_ASSERT_INT(LET_EQUAL, u8value, u8value, "Rename int assertion");
 }
 
+
+LET_TEST(debug_print_one_line){
+    LET_CALL_WRAP(function_to_test(3u));
+    LET_ASSERT_UINT(LET_EQUAL, 1u,1u);
+}
+
+LET_TEST(debug_print_multi_lines){
+    LET_CALL_WRAP(function_to_test_multiline());
+    LET_ASSERT_UINT(LET_EQUAL, 1u,1u);
+}
+
 int main (){
     LET_init();
     LET_Service mono_test = LET_service_init("mono", empty_init);
@@ -157,6 +175,12 @@ int main (){
     LET_test_register(&format_test, "str_assertion", str_assertion);
     LET_test_register(&format_test, "array_assertion", array_assertion);
     LET_service_runner(&format_test);
+
+    LET_Service debug_test = LET_service_init ("debug", empty_init);
+    LET_test_register(&debug_test, "debug_print_one_line", debug_print_one_line);
+    LET_test_register(&debug_test, "debug_print_multi_lines", debug_print_multi_lines);
+    LET_service_runner(&debug_test);
+
     LET_end();
     return 0;
 }

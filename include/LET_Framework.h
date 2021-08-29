@@ -111,7 +111,7 @@ typedef struct LET_Framework_Service {
 #define LET_TEST(function_name)  static void function_name(LET_Test *itself)
 #define LET_INIT_TEST(function_name) static  void function_name(void)
 #endif
-
+#define LET_CALL_WRAP(expression) LET_init_call_wrapper();expression;LET_end_call_wrapper();
 
 #ifdef LET_STOP_TEST_ON_FAILED
 #define LET_ASSERT_UINT_CALL(...) if(LET_KO==LET_ASSERT_uint(__VA_ARGS__))return
@@ -263,6 +263,8 @@ void LET_end(void);
 LET_Service LET_service_init(const char *const name, void (*func)(void));
 LET_CORE_EXCEPTION LET_test_register(LET_Service *const service, const char *const name, void (*func)(LET_Test *));
 void LET_service_runner(LET_Service *const service);
+void LET_init_call_wrapper(void);
+void LET_end_call_wrapper(void);
 
 extern void LET_Framework_printer (const char * data);
 

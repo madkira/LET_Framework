@@ -19,6 +19,8 @@
 // +---------------------------------------------+
 // | junit_format macros                         |
 // +---------------------------------------------+
+#define LET_STDOUT_BALISE                   "system-out"
+
 #define LET_TESTSUITE_BALISE                "testsuite"
 #define LET_TESTSUITES_BALISE               LET_TESTSUITE_BALISE "s"
 #define LET_TESTSUITE_TEST_NB_PARAMETER     "tests"
@@ -143,6 +145,17 @@ void LET_test_end_printer(void){
   LET_xml_close_balise(0);
 }
 
+
+void LET_init_call_wrapper(void){
+  LET_xml_open_balise(LET_STDOUT_BALISE, 1, 3, 1);
+  LET_xml_close_balise(0);
+  LET_Framework_printer("\n");
+}
+
+void LET_end_call_wrapper(void){
+  LET_xml_open_balise(LET_STDOUT_BALISE, 1, 3, 1);
+  LET_xml_close_balise(0);
+}
 
 void LET_assert_uint_printer(const char *const name,
                   LET_ASSERT_COMPARE compare,
