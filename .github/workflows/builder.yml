@@ -20,7 +20,7 @@ jobs:
         run: docker exec builder /bin/bash -c 'pwd && ls -la && mkdir build'
 
       - name: Build
-        run: docker exec builder /bin/bash -c 'cd build && cmake -DBUILD_TESTING=ON -DFORMAT=TEXT .. && make'
+        run: docker exec builder /bin/bash -c 'cd build && cmake -DBUILD_TESTING=ON -DFORMAT=JUNIT .. && make'
 
       - name: Run
         run: docker exec builder /bin/bash -c 'cd build && ./exemple/LET_FRAMEWORK_exemple'
