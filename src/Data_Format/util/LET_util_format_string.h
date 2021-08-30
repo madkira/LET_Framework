@@ -40,7 +40,7 @@ extern const char *LET_ASSERT_RESULT_STRING[];
 void LET_uint_to_decimal_string(char str[], uint64_t num);
 void LET_uint_to_base_string(char str[], uint64_t num, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION bytes);
 void LET_int_to_string(char str[], int64_t num);
-int8_t LET_compare_str(const char * a, const char * b);
+int16_t LET_compare_str(const char * a, const char * b);
 // uint32_t LET_str_size(const char *const a);
 void LET_array_convert(char dest[], const char *const src, uint32_t size, LET_ASSERT_REPRESENT format, LET_ASSERT_PRECISION whitespace);
 

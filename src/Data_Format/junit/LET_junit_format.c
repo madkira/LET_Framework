@@ -147,7 +147,7 @@ void LET_test_end_printer(void){
 
 
 void LET_init_call_wrapper(void){
-  LET_xml_open_balise(LET_STDOUT_BALISE, 1, 3, 1);
+  LET_xml_open_balise(LET_STDOUT_BALISE, 1, 3, 0);
   LET_xml_close_balise(0);
   LET_Framework_printer("\n");
 }
